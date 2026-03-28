@@ -1,0 +1,36 @@
+import { register } from "@reacticulum/types";
+import { Bold } from "./Bold";
+import { Color } from "./Color";
+import { Divider } from "./Divider";
+import { H1 } from "./H1";
+import { H2 } from "./H2";
+import { H3 } from "./H3";
+import { Input } from "./Input";
+import { Italic } from "./Italic";
+import { Link } from "./Link";
+import { Paragraph } from "./Paragraph";
+import { Underline } from "./Underline";
+
+register(Bold, 'bold');
+register(Underline, 'underline');
+register(Link, 'link');
+register(Input, 'input');
+register(Divider, 'divider');
+register(H1, 'h1');
+register(H2, 'h2');
+register(H3, 'h3');
+register(Italic, 'italic');
+register(Color, 'color');
+register(Paragraph, 'paragraph');
+
+export { Bold } from "./Bold";
+export { Color } from "./Color";
+export { Divider } from "./Divider";
+export { H1 } from "./H1";
+export { H2 } from "./H2";
+export { H3 } from "./H3";
+export { Input } from "./Input";
+export { Italic } from "./Italic";
+export { Link } from "./Link";
+export { Paragraph } from "./Paragraph";
+export { Underline } from "./Underline";

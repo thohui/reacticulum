@@ -1,0 +1,25 @@
+{
+  "name": "@reacticulum/playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsx src/index.ts --out-dir dist"
+  },
+  "dependencies": {
+    "@reacticulum/components": "workspace:^",
+    "@reacticulum/core": "workspace:^",
+    "@reacticulum/types": "workspace:^",
+    "glob": "^13.0.6",
+    "react": "^19.2.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "tsx": "^4.21.0"
+  }
+}
