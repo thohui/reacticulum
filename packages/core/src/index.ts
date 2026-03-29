@@ -1,11 +1,24 @@
 import { getMicronType } from "@reacticulum/types";
 import React, { ReactElement, ReactNode } from "react";
 
+function escapeMarkdown(text: string): string {
+	return text
+		.replace(/\\/g, '\\\\')
+		.replace(/`/g, '\\`')
+		.replace(/\*/g, '\\*')
+		.replace(/_/g, '\\_')
+		.replace(/>/g, '\\>')
+		.replace(/\|/g, '\\|')
+		.replace(/-/g, '\\-');
+}
+
 export function serialize(node: ReactNode): string {
 
 	if (node === null || node === undefined) return '';
 
-	if (typeof node === 'string' || typeof node === 'number') return String(node);
+	if (typeof node === 'string' || typeof node === 'number') {
+		return escapeMarkdown(String(node));
+	};
 
 	if (typeof node === 'boolean') return '';
 
@@ -33,11 +46,10 @@ export function serialize(node: ReactNode): string {
 			case 'italic': return `\`*${serialize(props.children)}\`*`;
 			case 'underline': return `\`_${serialize(props.children)}\`_`;
 			case 'divider': return `-${props.symbol}\n`;
-			// `[test`a]`
 			case 'link': return `\`[${serialize(props.children)}\`${props.to}]\``;
 			case 'input': return renderInput(props);
 			case 'color': return `\`F${props.hex}${serialize(props.children)}\`f`;
-			case 'paragraph': return `${serialize(props.children)}\n\n`;
+			case 'paragraph': return `${serialize(props.children)}\n`;
 		}
 
 	}
@@ -54,6 +66,7 @@ export function serialize(node: ReactNode): string {
 		case 'a': return `>[${serialize(props.children)}:${props.href}]`;
 		// case 'input': return renderInput(props);
 		case 'p': return `${serialize(props.children)}\n\n`;
+		case 'br': return `\n`;
 	}
 
 	// unknown component.
