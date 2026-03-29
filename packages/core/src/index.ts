@@ -116,25 +116,30 @@ function renderInput(props: {
   width?: number;
   backgroundColor?: string;
   passWord?: boolean;
+  texColor?: string;
 }) {
   let { name, placeholder, width, backgroundColor, passWord } = props;
 
   if (width === undefined) width = 24;
 
-	const content: string[] = [];
-	
-	// Set background color, default to #333 if not provided. We assume the terminal background is dark, so we use a dark gray as the default input background.
+  const content: string[] = [];
+  //Set text color, default to #fff if not provided. We assume the terminal background is dark, so we use white as the default text color.
   content.push(
-	`\`B${backgroundColor ? backgroundColor.replace("#", "") : "333"}`,
+    `\`F${props.texColor ? props.texColor.replace("#", "") : "fff"}`,
   );
 
-  content.push(`\`<${passWord ? '!':''}${width}|${name}\``);
+  // Set background color, default to #333 if not provided. We assume the terminal background is dark, so we use a dark gray as the default input background.
+  content.push(
+    `\`B${backgroundColor ? backgroundColor.replace("#", "") : "333"}`,
+  );
+
+  content.push(`\`<${passWord ? "!" : ""}${width}|${name}\``);
 
   if (placeholder) {
-	content.push(`${placeholder}`);
+    content.push(`${placeholder}`);
   }
 
-  content.push(">`b\n");
+  content.push(">`b`f\n");
 
   return content.join("");
 }

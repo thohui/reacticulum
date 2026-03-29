@@ -4,8 +4,9 @@ export interface InputProps {
 	placeholder?: string;
 	width?: number;
 	backgroundColor?: string;
+	texColor?: string;
 	passWord?: boolean;
 }
-export function Input({ name, placeholder, width = 24, backgroundColor, passWord }: InputProps) {
+export function Input({ name, placeholder, width = 24, backgroundColor, passWord, texColor }: InputProps) {
 	return null;
 }
