@@ -10,6 +10,7 @@ import { Italic } from "./Italic";
 import { Link } from "./Link";
 import { Paragraph } from "./Paragraph";
 import { Underline } from "./Underline";
+import { Radio } from "./Radio";
 
 register(Bold, 'bold');
 register(Underline, 'underline');
@@ -22,6 +23,7 @@ register(H3, 'h3');
 register(Italic, 'italic');
 register(Color, 'color');
 register(Paragraph, 'paragraph');
+register(Radio, 'radio');
 
 export { Bold } from "./Bold";
 export { Color } from "./Color";
@@ -34,3 +36,4 @@ export { Italic } from "./Italic";
 export { Link } from "./Link";
 export { Paragraph } from "./Paragraph";
 export { Underline } from "./Underline";
+export { Radio } from "./Radio";

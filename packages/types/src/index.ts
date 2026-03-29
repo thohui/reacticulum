@@ -1,7 +1,7 @@
 export type MicronType =
 	| 'h1' | 'h2' | 'h3'
 	| 'bold' | 'italic' | 'underline'
-	| 'link' | 'input' | 'divider' | 'color' | 'paragraph';
+	| 'link' | 'input' | 'divider' | 'color' | 'paragraph' | 'radio';
 
 const registry = new WeakMap<React.ComponentType<any>, MicronType>();
 
