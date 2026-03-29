@@ -1,4 +1,5 @@
 import {
+	Align,
   Bold,
   Color,
   Divider,
@@ -17,7 +18,10 @@ export default function IndexPage() {
   const created = new Date().toDateString();
   return (
     <>
-      <H1>Header 1</H1>
+      <H1 backgroundColor="f00" color="00f" align="left">Header 1 aligned center</H1>
+      <H1 align="center">Header 1 aligned center</H1>
+	  <H1 align="right">Header 1 aligned center</H1>
+		<Align align="left" />
       <br />
       <H2>Header 2</H2>
       <br />
@@ -34,7 +38,12 @@ export default function IndexPage() {
       <br />
       Sample input:
       <br />
-      <Input name="input" backgroundColor="f00" texColor="0F0" placeholder="input" />
+      <Input
+        name="input"
+        backgroundColor="f00"
+        texColor="0F0"
+        placeholder="input"
+      />
       <br />
       Sample passsword input:
       <br />

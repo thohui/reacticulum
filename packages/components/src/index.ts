@@ -1,4 +1,5 @@
 import { register } from "@reacticulum/types";
+import {Align} from "./Align";
 import { Bold } from "./Bold";
 import { Color } from "./Color";
 import { Divider } from "./Divider";
@@ -12,6 +13,7 @@ import { Paragraph } from "./Paragraph";
 import { Underline } from "./Underline";
 import { Radio } from "./Radio";
 
+register(Align, "align");
 register(Bold, 'bold');
 register(Underline, 'underline');
 register(Link, 'link');
@@ -25,6 +27,7 @@ register(Color, 'color');
 register(Paragraph, 'paragraph');
 register(Radio, 'radio');
 
+export { Align } from "./Align";
 export { Bold } from "./Bold";
 export { Color } from "./Color";
 export { Divider } from "./Divider";
