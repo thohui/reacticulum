@@ -1,4 +1,4 @@
-import { Color, H1, H2, Link, Radio, Paragraph, Underline } from "@reacticulum/components";
+import { Color, H1, H2, Link, Paragraph, Radio, Underline } from "@reacticulum/components";
 
 export default function IndexPage() {
   const created = new Date().toDateString();
