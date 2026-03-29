@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface ColorProps {
 	hex: string;
 	children: React.ReactNode;

@@ -9,9 +9,10 @@
   "dependencies": {
     "@reacticulum/components": "workspace:^",
     "@reacticulum/core": "workspace:^",
+    "@reacticulum/jsx-runtime": "workspace:^",
     "@reacticulum/types": "workspace:^",
-    "glob": "^13.0.6",
-    "react": "^19.2.4"
+    "esbuild": "^0.27.4",
+    "glob": "^13.0.6"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,5 @@
 import { getMicronType } from "@reacticulum/types";
-import React, { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode } from "react";
 
 function escapeMarkdown(text: string): string {
   return text
@@ -29,8 +29,8 @@ export function serialize(node: ReactNode): string {
 
   const { type, props } = el;
 
-  // React.Fragment
-  if (type === React.Fragment) {
+  // Fragment
+  if (type === 'fragment') {
     return serialize(props.children);
   }
 
@@ -100,11 +100,10 @@ export function serialize(node: ReactNode): string {
       return serialize(instance.render());
     }
 
-    // TODO: is there a cleaner way to detect a function component?
-    // function component
-    if (String(type).includes("return React.createElement")) {
-      return serialize((type as (props: any) => ReactNode)(props));
-    }
+
+    // try to render functional component.
+    return serialize((type as any)(props));
+
   }
 
   return serialize(props.children);
