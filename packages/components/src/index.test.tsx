@@ -1,7 +1,7 @@
 import { serialize } from '@reacticulum/core';
 import React from 'react';
 import { expect, test } from 'vitest';
-import { Bold, Color, Divider, H1, Input, Link } from '.';
+import { Bold, Color, Divider, H1, Input, Link, Radio } from '.';
 
 test('H1', () => {
 	expect(serialize(<H1>Hello</H1>)).toBe('#Hello\n');
@@ -27,6 +27,10 @@ test('Color', () => {
 	expect(serialize(<Color hex="f00">Red</Color>)).toBe('`Ff00Red`f');
 });
 
+test('Radio', () => {
+	expect(serialize(<Radio group="options" value="option1" label="label1" checked />)).toBe('`<^options|option1|*>`label1`');
+});
+
 test('composition', () => {
 	expect(serialize(
 		<>
@@ -35,5 +39,5 @@ test('composition', () => {
 			<Divider symbol="*" />
 			<Link to="about">About</Link>
 		</>
-	)).toBe('#My Node\n`!Welcome`!---\n>[About:about]');
+	)).toBe('>My Node\n`!Welcome`!---\n>[About:about]');
 });
