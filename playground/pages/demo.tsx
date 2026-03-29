@@ -34,7 +34,7 @@ export default function IndexPage() {
       <br />
       Sample input:
       <br />
-      <Input name="input" placeholder="input" />
+      <Input name="input" backgroundColor="f00" texColor="0F0" placeholder="input" />
       <br />
       Sample passsword input:
       <br />
