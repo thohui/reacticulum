@@ -36,60 +36,95 @@ export function serialize(node: ReactNode): string {
 
   const micronType = getMicronType(type);
 
+  let outPut = "";
+
+  // Add algnment if specified. We will use the same syntax for alignment across all components, so that we can easily apply alignment to any component in the future if needed.
+  if (props.align) {
+    switch (props.align) {
+      case "left":
+        outPut += `\`l`;
+        break;
+      case "center":
+        outPut += `\`c`;
+        break;
+      case "right":
+        outPut += `\`r`;
+        break;
+    }
+  }
+
+  if (props.backgroundColor) {
+    outPut += `\`B${props.backgroundColor.replace("#", "")}`;
+  }
+  if (props.color) {
+    outPut += `\`F${props.color.replace("#", "")}`;
+  }
+  if (props.bold) {
+    outPut += `\`!`;
+  }
+  if (props.italic) {
+    outPut += `\`*`;
+  }
+  if (props.underline) {
+    outPut += `\`_`;
+  }
+
   if (micronType) {
     switch (micronType) {
+      case "align":
+        return outPut;
       case "h1":
-        return `>${serialize(props.children)}\n`;
+        return (outPut += `>${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`);
       case "h2":
-        return `>>${serialize(props.children)}\n`;
+        return (outPut += `>>${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`);
       case "h3":
-        return `>>>${serialize(props.children)}\n`;
+        return (outPut += `>>>${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`);
       case "bold":
-        return `\`!${serialize(props.children)}\`!`;
+        return (outPut += `\`!${serialize(props.children)}\`! ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`);
       case "italic":
-        return `\`*${serialize(props.children)}\`*`;
+        return (outPut += `\`*${serialize(props.children)}\`* ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`);
       case "underline":
-        return `\`_${serialize(props.children)}\`_`;
+        return (outPut += `\`_${serialize(props.children)}\`_ ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`);
       case "divider":
-        return `-${props.symbol}\n`;
+        return (outPut += `-${props.symbol} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`);
       case "link":
-        return `\`[${serialize(props.children)}\`${props.to}]\``;
+        return (outPut += `\`[${serialize(props.children)}\`${props.to}]\` ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`);
       case "input":
         return renderInput(props);
       case "color":
-        return `\`F${props.hex}${serialize(props.children)}\`f`;
+        return (outPut += `\`F${props.hex}${serialize(props.children)}\`f`);
       case "paragraph":
-        return `${serialize(props.children)}\n`;
+        return (outPut += `${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`);
       case "radio":
-        return `\`<^${props.group}|${props.value}${props.checked ? "|*" : ""}>\`${props.label ? props.label : ""}\`\n`;
+        return (outPut += `\`<^|${props.group}|${props.value}${props.checked ? "|*" : ""}\`>${props.label ? props.label : ""} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`);
     }
   }
 
   // handle native elements.
   switch (type) {
     case "h1":
-      return `#${serialize(props.children)}\n`;
+      return `#${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""} \n`;
     case "h2":
-      return `##${serialize(props.children)}\n`;
+      return `##${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`;
     case "h3":
-      return `###${serialize(props.children)}\n`;
+      return `###${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`;
     case "b":
-      return `\`!${serialize(props.children)}\`!`;
+      return `\`!${serialize(props.children)}\`! ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`;
     case "i":
-      return `\`*${serialize(props.children)}\`*`;
+      return `\`*${serialize(props.children)}\`* ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`;
     case "u":
-      return `\`_${serialize(props.children)}\`_`;
+      return `\`_${serialize(props.children)}\`_ ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`;
     case "hr":
       return `---\n`;
     case "a":
-      return `>[${serialize(props.children)}:${props.href}]`;
+      return `>[${serialize(props.children)}:${props.href}] ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}`;
     // case 'input': return renderInput(props);
     case "p":
-      return `${serialize(props.children)}\n\n`;
+      return `${serialize(props.children)} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n\n`;
     case "br":
       return `\n`;
     case "radio":
-      return `\`<^${props.group}|${props.value}${props.checked ? "|*" : ""}>\`${props.label ? props.label : ""}\`\n`;
+      return `\`<^${props.group}|${props.value}${props.checked ? "|*" : ""}\`>${props.label ? props.label : ""} ${props.backgroundColor ? `\`b` : ""} ${props.color ? `\`f` : ""}\n`;
   }
 
   // unknown component.
@@ -113,20 +148,32 @@ function renderInput(props: {
   name: string;
   placeholder?: string;
   width?: number;
+  backgroundColor?: string;
+  passWord?: boolean;
+  texColor?: string;
 }) {
-  let { name, placeholder, width } = props;
+  let { name, placeholder, width, backgroundColor, passWord } = props;
 
   if (width === undefined) width = 24;
 
   const content: string[] = [];
+  //Set text color, default to #fff if not provided. We assume the terminal background is dark, so we use white as the default text color.
+  content.push(
+    `\`F${props.texColor ? props.texColor.replace("#", "") : "fff"}`,
+  );
 
-  content.push(`\`<${width}|${name}\``);
+  // Set background color, default to #333 if not provided. We assume the terminal background is dark, so we use a dark gray as the default input background.
+  content.push(
+    `\`B${backgroundColor ? backgroundColor.replace("#", "") : "333"}`,
+  );
+
+  content.push(`\`<${passWord ? "!" : ""}${width}|${name}\``);
 
   if (placeholder) {
-    content.push(`|${placeholder}`);
+    content.push(`${placeholder}`);
   }
 
-  content.push(">\n");
+  content.push(">`b`f\n");
 
   return content.join("");
 }

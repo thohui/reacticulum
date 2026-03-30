@@ -1,8 +1,18 @@
-export interface LinkProps {
-	to: string;
-	children: React.ReactNode;
-}
+import { StyleProps } from "./generictypes/Style";
 
-export function Link({ to, children }: LinkProps) {
-	return null;
+export interface LinkProps extends StyleProps {
+  to: string;
+  children: React.ReactNode;
+}
+export function Link({
+  children,
+  to,
+  align,
+  backgroundColor,
+  bold,
+  color,
+  italic,
+  underline,
+}: LinkProps) {
+  return <a>{children}</a>;
 }

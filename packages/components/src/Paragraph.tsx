@@ -1,3 +1,16 @@
-export function Paragraph({ children }: { children: React.ReactNode; }) {
-	return null;
+import { StyleProps } from "./generictypes/Style";
+
+export interface ParagraphProps extends StyleProps {
+  children: React.ReactNode;
+}
+export function Paragraph({
+  children,
+  align: alignement,
+  backgroundColor,
+  bold,
+  color,
+  italic,
+  underline,
+}: ParagraphProps) {
+  return <p>{children}</p>;
 }

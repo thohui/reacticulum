@@ -1,4 +1,5 @@
 export type MicronType =
+	| 'align'
 	| 'h1' | 'h2' | 'h3'
 	| 'bold' | 'italic' | 'underline'
 	| 'link' | 'input' | 'divider' | 'color' | 'paragraph' | 'radio';
