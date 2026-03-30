@@ -99,7 +99,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 	const entryContents = `
     import '@reacticulum/components'
     import { serialize } from '@reacticulum/core'
-    import * as _mod from '${path.resolve(posix(pagePath))}'
+    import * as _mod from '${posix(path.resolve(pagePath))}'
     const Page = _mod.default ?? _mod
     export const render = async () => {
       const tree = await Page({})
@@ -147,7 +147,7 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 	const outPath = path.join(path.resolve(outDir), `${name}.mu`);
 
 	const entryContents = `
-    import * as _mod from '${path.resolve(pagePath)}'
+    import * as _mod from '${posix(path.resolve(pagePath))}'
     const Page = _mod.default ?? _mod
     const serve = async (Component) => {
       try {
