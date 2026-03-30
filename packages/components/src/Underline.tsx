@@ -1,3 +1,16 @@
-export function Underline({ children }: { children: React.ReactNode; }) {
-	return null;
+import { StyleProps } from "./generictypes/Style";
+
+export interface UnderlineProps extends StyleProps {
+  children: React.ReactNode;
+}
+export function Underline({
+  children,
+  align,
+  backgroundColor,
+  bold,
+  color,
+  italic,
+  underline,
+}: UnderlineProps) {
+  return <u>{children}</u>;
 }
