@@ -1,4 +1,3 @@
-import React from "react";
 import { StyleProps } from "./generictypes/Style";
 
 export interface ColorProps extends StyleProps {
