@@ -147,12 +147,12 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 	const outPath = path.join(path.resolve(outDir), `${name}.mu`);
 
 	const entryContents = `
+    import '@reacticulum/components'
+    import { serialize } from '@reacticulum/core'
     import * as _mod from '${posix(path.resolve(pagePath))}'
     const Page = _mod.default ?? _mod
     const serve = async (Component) => {
       try {
-        const { serialize } = require('@reacticulum/core')
-        require('@reacticulum/components')
         const tree = await Component(process.env)
         process.stdout.write(serialize(tree))
       } catch (e) {
@@ -179,6 +179,6 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 		}
 	});
 
-	await fs.chmod(outPath, '755');
-	console.log(`dynamic => ${outPath}`);
+	if (process.platform !== 'win32') await fs.chmod(outPath, '755');
+	console.log(`dynamic => ${path.join(outDir, `${name}.mu`)}`);
 };
