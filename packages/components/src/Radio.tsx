@@ -1,4 +1,4 @@
-import { StyleProps } from "./generictypes/style";
+import { StyleProps } from "./generictypes/Style";
 
 export interface InputProps extends StyleProps {
   group: string;
@@ -10,7 +10,7 @@ export function Radio({
   group,
   value,
   checked,
-  align: alignement,
+  align,
   backgroundColor,
   bold,
   color,

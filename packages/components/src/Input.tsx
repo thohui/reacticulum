@@ -1,12 +1,18 @@
+import { StyleProps } from "./generictypes/Style";
 
-export interface InputProps {
-	name: string;
-	placeholder?: string;
-	width?: number;
-	backgroundColor?: string;
-	texColor?: string;
-	passWord?: boolean;
+export interface InputProps extends StyleProps {
+  name: string;
+  placeholder?: string;
+  width?: number;
+  passWord?: boolean;
 }
-export function Input({ name, placeholder, width = 24, backgroundColor, passWord, texColor }: InputProps) {
-	return null;
+export function Input({
+  name,
+  placeholder,
+  width = 24,
+  backgroundColor,
+  passWord,
+  color,
+}: InputProps) {
+  return null;
 }

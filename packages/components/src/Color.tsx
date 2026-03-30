@@ -1,10 +1,11 @@
 import React from "react";
+import { StyleProps } from "./generictypes/Style";
 
-export interface ColorProps {
-	hex: string;
-	children: React.ReactNode;
+export interface ColorProps extends StyleProps {
+  hex: string;
+  children: React.ReactNode;
 }
 
-export function Color({ hex, children }: ColorProps) {
-	return null;
+export function Color({ hex, children, ...rest }: ColorProps) {
+  return null;
 }
