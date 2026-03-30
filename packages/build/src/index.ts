@@ -43,11 +43,15 @@ export interface BuildOptions {
 	outDir: string;
 };
 
+// esbuild doesn't support windows paths in the contents property.
+// so we have to convert them to posix style before passing to esbuild.
+const posix = (p: string) => p.replaceAll('\\', '/');
+
 async function loadPageConfig(pagePath: string, pagesDir: string) {
 	const result = await esbuild.build({
 		...ESBUILD_COMMON,
 		stdin: {
-			contents: `import * as _mod from '${path.resolve(pagePath)}'; export const config = _mod?.config ?? {};`,
+			contents: `import * as _mod from '${posix(path.resolve(pagePath))}'; export const config = _mod?.config ?? {};`,
 			resolveDir: path.resolve(pagesDir),
 			loader: 'tsx',
 		},
@@ -69,12 +73,15 @@ async function loadPageConfig(pagePath: string, pagesDir: string) {
 export async function build(options: BuildOptions) {
 	const { pagesDir, outDir } = options;
 
-	await fs.mkdir(outDir, { recursive: true });
+	const parsedOutDir = path.parse(outDir);
+	const parsedPagesDir = path.parse(pagesDir);
+
+	await fs.mkdir(parsedOutDir.dir, { recursive: true });
 
 	const pages = await glob(`${pagesDir}/**/*.{jsx,tsx}`);
 
 	for (const pagePath of pages) {
-		const config = await loadPageConfig(pagePath, pagesDir);
+		const config = await loadPageConfig(pagePath, parsedPagesDir.dir);
 		const name = path.basename(pagePath, path.extname(pagePath));
 		const isDynamic = config.dynamic ?? false;
 
@@ -92,7 +99,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 	const entryContents = `
     import '@reacticulum/components'
     import { serialize } from '@reacticulum/core'
-    import * as _mod from '${path.resolve(pagePath)}'
+    import * as _mod from '${path.resolve(posix(pagePath))}'
     const Page = _mod.default ?? _mod
     export const render = async () => {
       const tree = await Page({})
@@ -111,7 +118,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 		},
 		write: false,
 		define: {
-			'REACTICULUM_CURRENT_PAGE': JSON.stringify(name)
+			'REACTICULUM_PAGE': JSON.stringify(name)
 		}
 	});
 
@@ -137,7 +144,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 async function buildDynamic(options: BuildOptions, pagePath: string, name: string) {
 	const { outDir, pagesDir } = options;
 
-	const outPath = path.join(outDir, `${name}.mu`);
+	const outPath = path.join(path.resolve(outDir), `${name}.mu`);
 
 	const entryContents = `
     import * as _mod from '${path.resolve(pagePath)}'
@@ -168,7 +175,7 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 		outfile: outPath,
 		banner: { js: SHEBANG + GUARD },
 		define: {
-			'REACTICULUM_CURRENT_PAGE': JSON.stringify(name)
+			'REACTICULUM_PAGE': JSON.stringify(name)
 		}
 	});
 
