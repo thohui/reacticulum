@@ -2,6 +2,7 @@
   "name": "@reacticulum/components",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "vitest",
