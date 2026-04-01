@@ -48,7 +48,7 @@ test('Divider', () => {
 });
 
 test('Input', () => {
-	expect(serialize(<Input name="name" placeholder="Your name" />)).toBe('`Ffff`B333`<24|name`Your name>`b`f\n');
+	expect(serialize(<Input name="name" placeholder="Your name" />)).toBe('`<24|name`Your name>\n');
 });
 
 test('Radio', () => {

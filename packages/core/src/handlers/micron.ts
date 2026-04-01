@@ -1,30 +1,43 @@
 import { MicronType } from '@reacticulum/types';
 import { SerializeContext } from '../context';
-import { renderInput } from '../utils/input';
 
 type Handler = (props: any, ctx: SerializeContext) => string;
 
+const alignTokens: Record<string, string> = { left: '`l', center: '`c', right: '`r' };
+
 export const micronHandlers: Record<MicronType, Handler> = {
-	align: ({ align }) => {
-		switch (align) {
-			case 'left': return '`l';
-			case 'center': return '`c';
-			case 'right': return '`r';
-			default: return '';
-		}
-	},
-	h1: ({ children }, ctx) => `>${ctx.serialize(children)}`,
-	h2: ({ children }, ctx) => `>>${ctx.serialize(children)}`,
-	h3: ({ children }, ctx) => `>>>${ctx.serialize(children)}`,
-	bold: ({ children }, ctx) => `\`!${ctx.serialize(children)}\`!`,
-	italic: ({ children }, ctx) => `\`*${ctx.serialize(children)}\`*`,
+	align:     ({ align }: { align: string }) => alignTokens[align] ?? '',
+	h1:        ({ children }, ctx) => `>${ctx.serialize(children)}`,
+	h2:        ({ children }, ctx) => `>>${ctx.serialize(children)}`,
+	h3:        ({ children }, ctx) => `>>>${ctx.serialize(children)}`,
+	bold:      ({ children }, ctx) => `\`!${ctx.serialize(children)}\`!`,
+	italic:    ({ children }, ctx) => `\`*${ctx.serialize(children)}\`*`,
 	underline: ({ children }, ctx) => `\`_${ctx.serialize(children)}\`_`,
-	link: ({ children, to }, ctx) => `\`[${ctx.serialize(children)}\`${to}]\``,
-	divider: ({ symbol }) => `-${symbol}`,
-	color: ({ hex, children }, ctx) => `\`F${hex}${ctx.serialize(children)}\`f`,
+	link:      ({ children, to }: { children: unknown; to: string }, ctx) => `\`[${ctx.serialize(children)}\`${to}]\``,
+	divider:   ({ symbol }: { symbol: string }) => `-${symbol}`,
+	color:     ({ hex, children }: { hex: string; children: unknown }, ctx) => `\`F${hex}${ctx.serialize(children)}\`f`,
 	paragraph: ({ children }, ctx) => ctx.serialize(children),
-	radio: ({ group, value, checked, label }) =>
-		`\`<^|${group}|${value}${checked ? '|*' : ''}\`>${label ?? ''}`,
-	input: (props) => renderInput(props),
-	checkbox: ({ fieldName, value, label, checked }) => `\`<?|${fieldName}|${value}${checked ? '|*' : ''}\`>${label ?? ''}`,
+
+	radio: ({ group, value, checked, label }: { group: string; value: string; checked?: boolean; label?: string }) => {
+		const out = ['`<^|', group, '|', value];
+		if (checked) out.push('|*');
+		out.push('`>', label ?? '');
+		return out.join('');
+	},
+
+	input: ({ name, placeholder, passWord, width = 24 }: { name: string; placeholder?: string; passWord?: boolean; width?: number }) => {
+		const out: (string | number)[] = ['`<'];
+		if (passWord) out.push('!');
+		out.push(width, '|', name, '`');
+		if (placeholder) out.push(placeholder);
+		out.push('>\n');
+		return out.join('');
+	},
+
+	checkbox: ({ fieldName, value, label, checked }: { fieldName: string; value?: string; label?: string; checked?: boolean }) => {
+		const out = ['`<?|', fieldName, '|', value];
+		if (checked) out.push('|*');
+		out.push('`>', label ?? '');
+		return out.join('');
+	},
 };
