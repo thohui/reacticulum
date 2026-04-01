@@ -1,4 +1,4 @@
-import { StyleProps } from "./generictypes/Style";
+import { StyleProps } from "./types";
 
 export interface ParagraphProps extends StyleProps {
   children: React.ReactNode;
@@ -12,5 +12,5 @@ export function Paragraph({
   italic,
   underline,
 }: ParagraphProps) {
-  return <p>{children}</p>;
+  return null;
 }

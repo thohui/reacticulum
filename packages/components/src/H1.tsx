@@ -1,8 +1,9 @@
-import { StyleProps } from "./generictypes/Style";
+import { StyleProps } from "./types";
 
 export interface H1props extends StyleProps {
   children: React.ReactNode;
 }
+
 export function H1({
   children,
   align,
@@ -12,5 +13,5 @@ export function H1({
   italic,
   underline,
 }: H1props) {
-  return <h1>{children}</h1>;
+  return null;
 }

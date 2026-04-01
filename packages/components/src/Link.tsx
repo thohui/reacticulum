@@ -1,4 +1,4 @@
-import { StyleProps } from "./generictypes/Style";
+import { StyleProps } from "./types";
 
 export interface LinkProps extends StyleProps {
   to: string;
@@ -14,5 +14,5 @@ export function Link({
   italic,
   underline,
 }: LinkProps) {
-  return <a>{children}</a>;
+  return null;
 }

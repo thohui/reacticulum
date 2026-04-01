@@ -7,6 +7,11 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "build": "pnpm --filter=@reacticulum/playground build"
+    "build": "pnpm --filter=@reacticulum/playground build",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vitest": "^4.1.2"
   }
 }

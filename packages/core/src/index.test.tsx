@@ -38,7 +38,7 @@ test('fragment', () => {
 test('nested components', () => {
 	const Title: React.FC<PropsWithChildren> = ({ children }) => <h1>{children}</h1>;
 	register(Title, 'h1');
-	expect(serialize(<Title>Hello</Title>)).toBe('#Hello\n');
+	expect(serialize(<Title>Hello</Title>)).toBe('>Hello\n');
 });
 
 // arrays

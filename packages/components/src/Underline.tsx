@@ -1,4 +1,4 @@
-import { StyleProps } from "./generictypes/Style";
+import { StyleProps } from "./types";
 
 export interface UnderlineProps extends StyleProps {
   children: React.ReactNode;
@@ -12,5 +12,5 @@ export function Underline({
   italic,
   underline,
 }: UnderlineProps) {
-  return <u>{children}</u>;
+  return null;
 }

@@ -5,6 +5,7 @@ import { createRequire } from 'module';
 import path from 'path';
 import { runInNewContext } from 'vm';
 
+
 const SHEBANG = '#!/usr/bin/env node\n';
 
 const GUARD = `
@@ -138,6 +139,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 	const micron = await mod.exports.render();
 	const outPath = path.join(outDir, `${name}.mu`);
 	await fs.writeFile(outPath, micron);
+	if (process.platform !== 'win32') await fs.chmod(outPath, '644');
 	console.log(`static  => ${outPath}`);
 };
 
