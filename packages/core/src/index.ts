@@ -32,8 +32,12 @@ function serializeNode(node: unknown, ctx: SerializeContext): string {
 
 	if (meta) {
 		const tokens = stylePrefix(props, meta.canHaveColor, meta.canHaveFormatting);
+
 		const newlinePrefix = meta.startsWithNewLine ? '\n' : '';
-		const content = micronHandlers[meta.type](props, ctx);
+
+		const handler = micronHandlers[meta.type];
+		const content = handler(props, ctx);
+
 		const suffix = buildSuffix(props, meta.canHaveColor, meta.endsWithNewLine, meta.startsWithNewLine);
 		// tokens must come after '>' not before — micron ignores styles before the heading
 		// marker. any '>' here is from the handler, not user content (escapeMarkdown
