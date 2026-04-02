@@ -1,8 +1,18 @@
 export type MicronType =
 	| 'align'
-	| 'h1' | 'h2' | 'h3'
-	| 'bold' | 'italic' | 'underline'
-	| 'link' | 'input' | 'divider' | 'color' | 'paragraph' | 'radio' | 'checkbox';
+	| 'h1'
+	| 'h2'
+	| 'h3'
+	| 'bold'
+	| 'italic'
+	| 'underline'
+	| 'link'
+	| 'input'
+	| 'divider'
+	| 'color'
+	| 'paragraph'
+	| 'radio'
+	| 'checkbox';
 
 export type ComponentMeta = {
 	/** The micron element type this component maps to. */
@@ -25,30 +35,96 @@ export type ComponentMeta = {
 };
 
 const typeDefaults: Record<MicronType, Omit<ComponentMeta, 'type'>> = {
-	align: { canHaveColor: false, canHaveFormatting: false, endsWithNewLine: false, startsWithNewLine: false },
-	h1: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: true, startsWithNewLine: false },
-	h2: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: true, startsWithNewLine: false },
-	h3: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: true, startsWithNewLine: false },
-	bold: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: false, startsWithNewLine: false },
-	italic: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: false, startsWithNewLine: false },
-	underline: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: false, startsWithNewLine: false },
-	link: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: false, startsWithNewLine: false },
+	align: {
+		canHaveColor: false,
+		canHaveFormatting: false,
+		endsWithNewLine: false,
+		startsWithNewLine: false,
+	},
+	h1: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: true,
+		startsWithNewLine: false,
+	},
+	h2: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: true,
+		startsWithNewLine: false,
+	},
+	h3: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: true,
+		startsWithNewLine: false,
+	},
+	bold: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: false,
+		startsWithNewLine: false,
+	},
+	italic: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: false,
+		startsWithNewLine: false,
+	},
+	underline: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: false,
+		startsWithNewLine: false,
+	},
+	link: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: false,
+		startsWithNewLine: false,
+	},
 	// color uses its own hex prop; color/backgroundColor props would conflict
-	color: { canHaveColor: false, canHaveFormatting: false, endsWithNewLine: false, startsWithNewLine: false },
-	input: { canHaveColor: true, canHaveFormatting: false, endsWithNewLine: false, startsWithNewLine: false },
-	divider: { canHaveColor: true, canHaveFormatting: false, endsWithNewLine: true, startsWithNewLine: true },
-	paragraph: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: true, startsWithNewLine: false },
-	radio: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: true, startsWithNewLine: false },
-	checkbox: { canHaveColor: true, canHaveFormatting: true, endsWithNewLine: false, startsWithNewLine: true },
+	color: {
+		canHaveColor: false,
+		canHaveFormatting: false,
+		endsWithNewLine: false,
+		startsWithNewLine: false,
+	},
+	input: {
+		canHaveColor: true,
+		canHaveFormatting: false,
+		endsWithNewLine: false,
+		startsWithNewLine: false,
+	},
+	divider: {
+		canHaveColor: true,
+		canHaveFormatting: false,
+		endsWithNewLine: true,
+		startsWithNewLine: true,
+	},
+	paragraph: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: true,
+		startsWithNewLine: false,
+	},
+	radio: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: true,
+		startsWithNewLine: false,
+	},
+	checkbox: {
+		canHaveColor: true,
+		canHaveFormatting: true,
+		endsWithNewLine: false,
+		startsWithNewLine: true,
+	},
 };
 
 const registry = new WeakMap<React.ComponentType<any>, ComponentMeta>();
 
-export const register = (
-	component: React.ComponentType<any>,
-	type: MicronType,
-	meta?: Partial<Omit<ComponentMeta, 'type'>>
-) => {
+export const register = (component: React.ComponentType<any>, type: MicronType, meta?: Partial<Omit<ComponentMeta, 'type'>>) => {
 	registry.set(component, { type, ...typeDefaults[type], ...meta });
 };
 
@@ -57,5 +133,4 @@ export const getMicronMeta = (component: unknown): ComponentMeta | null => {
 	return registry.get(component as React.ComponentType<any>) ?? null;
 };
 
-export const getMicronType = (component: unknown): MicronType | null =>
-	getMicronMeta(component)?.type ?? null;
+export const getMicronType = (component: unknown): MicronType | null => getMicronMeta(component)?.type ?? null;

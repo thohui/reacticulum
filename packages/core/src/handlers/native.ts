@@ -11,6 +11,5 @@ export const nativeHandlers: Partial<Record<string, Handler>> = {
 	a: ({ children, href }, ctx) => `>[${ctx.serialize(children)}:${href}]`,
 	p: ({ children }, ctx) => `${ctx.serialize(children)}\n\n`,
 	br: () => `\n`,
-	radio: ({ group, value, checked, label }, ctx) =>
-		`\`<^${group}|${value}${checked ? '|*' : ''}\`>${label ?? ''}\n`,
+	radio: ({ group, value, checked, label }, ctx) => `\`<^${group}|${value}${checked ? '|*' : ''}\`>${label ?? ''}\n`,
 };

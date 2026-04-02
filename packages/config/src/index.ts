@@ -14,11 +14,10 @@ export function defineConfig(config: ReacticulumConfig): ReacticulumConfig {
 
 export async function loadConfig(configPath: string = CONFIG_FILE): Promise<ReacticulumConfig> {
 	const jiti = createJiti(import.meta.url);
-	const mod = await jiti.import<{ default?: ReacticulumConfig; }>(path.resolve(configPath));
+	const mod = await jiti.import<{ default?: ReacticulumConfig }>(path.resolve(configPath));
 	if (mod.default) {
 		return mod.default;
 	} else {
 		throw new Error('Config file must export default');
 	}
 }
-

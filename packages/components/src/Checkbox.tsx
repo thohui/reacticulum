@@ -1,4 +1,4 @@
-import { StyleProps } from "./types";
+import { StyleProps } from './types';
 
 export interface CheckboxProps extends StyleProps {
 	fieldName: string;

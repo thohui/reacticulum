@@ -1,16 +1,8 @@
-import { StyleProps } from "./types";
+import { StyleProps } from './types';
 
 export interface ParagraphProps extends StyleProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
-export function Paragraph({
-  children,
-  align: alignement,
-  backgroundColor,
-  bold,
-  color,
-  italic,
-  underline,
-}: ParagraphProps) {
-  return null;
+export function Paragraph({ children, align: alignement, backgroundColor, bold, color, italic, underline }: ParagraphProps) {
+	return null;
 }

@@ -18,14 +18,22 @@ type StyleProps = {
 	underline?: boolean;
 };
 
+const stripHashTag = (color: string) => color.replaceAll('#', '');
+
 export function stylePrefix(props: StyleProps, canHaveColor: boolean, canHaveFormatting: boolean): string {
 	const parts: string[] = [];
 	if (canHaveFormatting) {
 		if (props.align) {
 			switch (props.align) {
-				case 'left':   parts.push('`l'); break;
-				case 'center': parts.push('`c'); break;
-				case 'right':  parts.push('`r'); break;
+				case 'left':
+					parts.push('`l');
+					break;
+				case 'center':
+					parts.push('`c');
+					break;
+				case 'right':
+					parts.push('`r');
+					break;
 			}
 		}
 		if (props.bold) parts.push('`!');
@@ -33,18 +41,13 @@ export function stylePrefix(props: StyleProps, canHaveColor: boolean, canHaveFor
 		if (props.underline) parts.push('`_');
 	}
 	if (canHaveColor) {
-		if (props.backgroundColor) parts.push(`\`B${props.backgroundColor}`);
-		if (props.color) parts.push(`\`F${props.color}`);
+		if (props.backgroundColor) parts.push(`\`B${stripHashTag(props.backgroundColor)}`);
+		if (props.color) parts.push(`\`F${stripHashTag(props.color)}`);
 	}
 	return parts.join('');
 }
 
-export function buildSuffix(
-	props: StyleProps,
-	canHaveColor: boolean,
-	endsWithNewLine: boolean,
-	blockLevel: boolean = false,
-): string {
+export function buildSuffix(props: StyleProps, canHaveColor: boolean, endsWithNewLine: boolean, blockLevel: boolean = false): string {
 	const reset: string[] = [];
 	if (canHaveColor) {
 		if (props.backgroundColor) reset.push('`b');

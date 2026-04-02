@@ -4,7 +4,7 @@ import { micronHandlers } from './handlers/micron';
 import { nativeHandlers } from './handlers/native';
 import { buildSuffix, escapeMarkdown, stylePrefix } from './utils/styles';
 
-type ReactElement = { type: unknown; props: any; };
+type ReactElement = { type: unknown; props: any };
 
 export function serialize(node: unknown): string {
 	const ctx: SerializeContext = {
@@ -15,7 +15,6 @@ export function serialize(node: unknown): string {
 }
 
 function serializeNode(node: unknown, ctx: SerializeContext): string {
-
 	if (node === null || node === undefined) return '';
 	if (typeof node === 'boolean') return '';
 	if (typeof node === 'string' || typeof node === 'number') return escapeMarkdown(String(node));

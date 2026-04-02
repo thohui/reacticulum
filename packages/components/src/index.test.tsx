@@ -28,11 +28,11 @@ test('Underline', () => {
 });
 
 test('Color', () => {
-	expect(serialize(<Color hex="f00">Red</Color>)).toBe('`Ff00Red`f');
+	expect(serialize(<Color hex='f00'>Red</Color>)).toBe('`Ff00Red`f');
 });
 
 test('Link', () => {
-	expect(serialize(<Link to="about">About</Link>)).toBe('`[About`about]`');
+	expect(serialize(<Link to='about'>About</Link>)).toBe('`[About`about]`');
 });
 
 test('Paragraph', () => {
@@ -40,44 +40,46 @@ test('Paragraph', () => {
 });
 
 test('Align', () => {
-	expect(serialize(<Align align="center" />)).toBe('`c');
+	expect(serialize(<Align align='center' />)).toBe('`c');
 });
 
 test('Divider', () => {
-	expect(serialize(<Divider symbol="*" />)).toBe('\n-*\n');
+	expect(serialize(<Divider symbol='*' />)).toBe('\n-*\n');
 });
 
 test('Input', () => {
-	expect(serialize(<Input name="name" placeholder="Your name" />)).toBe('`<24|name`Your name>\n');
+	expect(serialize(<Input name='name' placeholder='Your name' />)).toBe('`<24|name`Your name>\n');
 });
 
 test('Radio', () => {
-	expect(serialize(<Radio group="options" value="option1" label="label1" checked />)).toBe('`<^|options|option1|*`>label1\n');
+	expect(serialize(<Radio group='options' value='option1' label='label1' checked />)).toBe('`<^|options|option1|*`>label1\n');
 });
 
 test('Checkbox', () => {
-	expect(serialize(<Checkbox fieldName="agree" value="yes" label="Accept terms" />)).toBe('\n`<?|agree|yes`>Accept terms');
+	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' />)).toBe('\n`<?|agree|yes`>Accept terms');
 });
 
 test('Checkbox checked', () => {
-	expect(serialize(<Checkbox fieldName="agree" value="yes" label="Accept terms" checked />)).toBe('\n`<?|agree|yes|*`>Accept terms');
+	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' checked />)).toBe('\n`<?|agree|yes|*`>Accept terms');
 });
 
 test('Checkbox with color', () => {
-	expect(serialize(<Checkbox fieldName="agree" value="yes" label="Accept terms" color="0f0" />)).toBe('\n`F0f0`<?|agree|yes`>Accept terms\n`f\n');
+	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' color='0f0' />)).toBe('\n`F0f0`<?|agree|yes`>Accept terms\n`f\n');
 });
 
 test('H1 with color', () => {
-	expect(serialize(<H1 color="f00">Red heading</H1>)).toBe('>`Ff00Red heading `f\n');
+	expect(serialize(<H1 color='f00'>Red heading</H1>)).toBe('>`Ff00Red heading `f\n');
 });
 
 test('composition', () => {
-	expect(serialize(
-		<>
-			<H1>My Node</H1>
-			<Bold>Welcome</Bold>
-			<Divider symbol="*" />
-			<Link to="about">About</Link>
-		</>
-	)).toBe('>My Node\n`!Welcome`!\n-*\n`[About`about]`');
+	expect(
+		serialize(
+			<>
+				<H1>My Node</H1>
+				<Bold>Welcome</Bold>
+				<Divider symbol='*' />
+				<Link to='about'>About</Link>
+			</>,
+		),
+	).toBe('>My Node\n`!Welcome`!\n-*\n`[About`about]`');
 });

@@ -1,3 +1,3 @@
-import { SerializeContext } from "../context";
+import { SerializeContext } from '../context';
 
 export type Handler = (props: any, ctx: SerializeContext) => string;

@@ -5,7 +5,6 @@ import { createRequire } from 'module';
 import path from 'path';
 import { runInNewContext } from 'vm';
 
-
 const SHEBANG = '#!/usr/bin/env node\n';
 
 const GUARD = `
@@ -24,7 +23,7 @@ process.on('unhandledRejection', (e) => {
 `;
 
 const ESBUILD_ALIAS = {
-	'react': '@reacticulum/jsx-runtime',
+	react: '@reacticulum/jsx-runtime',
 	'react-dom': '@reacticulum/jsx-runtime',
 	'react/jsx-runtime': '@reacticulum/jsx-runtime',
 };
@@ -42,7 +41,7 @@ const ESBUILD_COMMON = {
 export interface BuildOptions {
 	pagesDir: string;
 	outDir: string;
-};
+}
 
 // esbuild doesn't support windows paths in the contents property.
 // so we have to convert them to posix style before passing to esbuild.
@@ -94,7 +93,7 @@ export async function build(options: BuildOptions) {
 	}
 
 	console.log('build complete');
-};
+}
 
 async function buildStatic(options: BuildOptions, pagePath: string, name: string) {
 	const entryContents = `
@@ -119,8 +118,8 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 		},
 		write: false,
 		define: {
-			'REACTICULUM_PAGE': JSON.stringify(name)
-		}
+			REACTICULUM_PAGE: JSON.stringify(name),
+		},
 	});
 
 	const code = result.outputFiles[0].text;
@@ -141,7 +140,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 	await fs.writeFile(outPath, micron);
 	if (process.platform !== 'win32') await fs.chmod(outPath, '644');
 	console.log(`static  => ${outPath}`);
-};
+}
 
 async function buildDynamic(options: BuildOptions, pagePath: string, name: string) {
 	const { outDir, pagesDir } = options;
@@ -177,10 +176,10 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 		outfile: outPath,
 		banner: { js: SHEBANG + GUARD },
 		define: {
-			'REACTICULUM_PAGE': JSON.stringify(name)
-		}
+			REACTICULUM_PAGE: JSON.stringify(name),
+		},
 	});
 
 	if (process.platform !== 'win32') await fs.chmod(outPath, '755');
 	console.log(`dynamic => ${path.join(outDir, `${name}.mu`)}`);
-};
+}
