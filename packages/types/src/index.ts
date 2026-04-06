@@ -111,14 +111,14 @@ const typeDefaults: Record<MicronType, Omit<ComponentMeta, 'type'>> = {
 	radio: {
 		canHaveColor: true,
 		canHaveFormatting: true,
-		endsWithNewLine: true,
+		endsWithNewLine: false,
 		startsWithNewLine: false,
 	},
 	checkbox: {
 		canHaveColor: true,
 		canHaveFormatting: true,
 		endsWithNewLine: false,
-		startsWithNewLine: true,
+		startsWithNewLine: false,
 	},
 };
 

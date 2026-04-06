@@ -3,7 +3,7 @@ import { StyleProps } from './types';
 export interface CheckboxProps extends StyleProps {
 	fieldName: string;
 	checked?: boolean;
-	value?: string;
+	value: string;
 	label?: string;
 }
 
