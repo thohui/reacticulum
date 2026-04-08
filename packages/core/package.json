@@ -18,8 +18,9 @@
 		"test:run": "vitest run"
 	},
 	"devDependencies": {
-		"@reacticulum/types": "workspace:^",
 		"@reacticulum/components": "workspace:^",
+		"@reacticulum/types": "workspace:^",
+		"@types/node": "^25.5.0",
 		"@types/react": "^19.2.14",
 		"@vitejs/plugin-react": "^6.0.1",
 		"tsup": "^8.5.1",

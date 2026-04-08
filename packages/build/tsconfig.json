@@ -7,7 +7,9 @@
 		"jsx": "react-jsx",
 		"jsxImportSource": "@reacticulum/jsx-runtime",
 		"esModuleInterop": true,
-		"outDir": "dist"
+		"rootDir": "./src",
+		"outDir": "dist",
+		"types": ["node"]
 	},
 	"include": ["src"]
 }

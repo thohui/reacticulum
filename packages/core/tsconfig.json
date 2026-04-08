@@ -6,7 +6,8 @@
 		"strict": true,
 		"declaration": true,
 		"outDir": "dist",
-		"jsx": "react"
+		"jsx": "react",
+		"rootDir": "./src"
 	},
 	"include": ["src", "vitest.config.ts"]
 }

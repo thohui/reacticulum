@@ -23,7 +23,7 @@ process.on('unhandledRejection', (e) => {
 `;
 
 const ESBUILD_ALIAS = {
-	react: '@reacticulum/jsx-runtime',
+	'react': '@reacticulum/jsx-runtime',
 	'react-dom': '@reacticulum/jsx-runtime',
 	'react/jsx-runtime': '@reacticulum/jsx-runtime',
 };
