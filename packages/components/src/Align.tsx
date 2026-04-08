@@ -1,8 +1,7 @@
-import { StyleProps } from "./generictypes/Style";
-
-export interface AlignProps extends StyleProps {
-  children?: React.ReactNode;
+export interface AlignProps {
+	align: 'left' | 'center' | 'right';
 }
-export function Align({ children }: AlignProps) {
-  return null;
+
+export function Align({ align }: AlignProps) {
+	return null;
 }

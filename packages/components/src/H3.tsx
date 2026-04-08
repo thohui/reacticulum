@@ -1,16 +1,8 @@
-import { StyleProps } from "./generictypes/Style";
+import { StyleProps } from './types';
 
 export interface H3props extends StyleProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
-export function H3({
-  children,
-  align,
-  backgroundColor,
-  bold,
-  color,
-  italic,
-  underline,
-}: H3props) {
-  return <h3>{children}</h3>;
+export function H3({ children, align, backgroundColor, bold, color, italic, underline }: H3props) {
+	return null;
 }

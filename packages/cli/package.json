@@ -1,33 +1,33 @@
 {
-  "name": "@reacticulum/cli",
-  "version": "1.0.0",
-  "description": "",
-  "bin": {
-    "reacticulum": "./dist/index.mjs"
-  },
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "type": "module",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "scripts": {
-    "build": "tsdown src/index.ts",
-    "dev": "tsdown src/index.ts --watch"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.33.0",
-  "dependencies": {
-    "@reacticulum/config": "workspace:^",
-    "@reacticulum/build": "workspace:^",
-    "cac": "^7.0.0",
-    "jiti": "^2.6.1"
-  },
-  "devDependencies": {
-    "@types/node": "^25.5.0",
-    "tsdown": "^0.21.7"
-  }
+	"name": "@reacticulum/cli",
+	"version": "1.0.0",
+	"description": "",
+	"bin": {
+		"reacticulum": "./dist/index.mjs"
+	},
+	"main": "./src/index.ts",
+	"module": "./src/index.ts",
+	"type": "module",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build": "tsdown src/index.ts",
+		"dev": "tsdown src/index.ts --watch"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.33.0",
+	"dependencies": {
+		"@reacticulum/config": "workspace:^",
+		"@reacticulum/build": "workspace:^",
+		"cac": "^7.0.0",
+		"jiti": "^2.6.1"
+	},
+	"devDependencies": {
+		"@types/node": "^25.5.0",
+		"tsdown": "^0.21.7"
+	}
 }

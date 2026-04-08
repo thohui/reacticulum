@@ -1,29 +1,29 @@
 {
-  "name": "@reacticulum/playground",
-  "version": "1.0.0",
-  "description": "",
-  "type": "module",
-  "scripts": {
-    "build": "tsx src/index.ts --out-dir dist"
-  },
-  "dependencies": {
-    "@reacticulum/components": "workspace:^",
-    "@reacticulum/core": "workspace:^",
-    "@reacticulum/jsx-runtime": "workspace:^",
-    "@reacticulum/types": "workspace:^",
-    "@reacticulum/build": "workspace:^",
-    "@reacticulum/cli": "workspace:^",
-    "@reacticulum/config": "workspace:^",
-    "esbuild": "^0.27.4",
-    "glob": "^13.0.6"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.33.0",
-  "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@types/react": "^19.2.14",
-    "tsx": "^4.21.0"
-  }
+	"name": "@reacticulum/playground",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"scripts": {
+		"build": "tsx src/index.ts --out-dir dist"
+	},
+	"dependencies": {
+		"@reacticulum/components": "workspace:^",
+		"@reacticulum/core": "workspace:^",
+		"@reacticulum/jsx-runtime": "workspace:^",
+		"@reacticulum/types": "workspace:^",
+		"@reacticulum/build": "workspace:^",
+		"@reacticulum/cli": "workspace:^",
+		"@reacticulum/config": "workspace:^",
+		"esbuild": "^0.27.4",
+		"glob": "^13.0.6"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.33.0",
+	"devDependencies": {
+		"@types/node": "^25.5.0",
+		"@types/react": "^19.2.14",
+		"tsx": "^4.21.0"
+	}
 }

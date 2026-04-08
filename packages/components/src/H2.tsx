@@ -1,16 +1,8 @@
-import { StyleProps } from "./generictypes/Style";
+import { StyleProps } from './types';
 
 export interface H2props extends StyleProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
-export function H2({
-  children,
-  align,
-  backgroundColor,
-  bold,
-  color,
-  italic,
-  underline,
-}: H2props) {
-  return <h2>{children}</h2>;
+export function H2({ children, align, backgroundColor, bold, color, italic, underline }: H2props) {
+	return null;
 }

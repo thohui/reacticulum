@@ -1,12 +1,13 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "declaration": true,
-    "outDir": "dist",
-		"jsx": "react"
-  },
-  "include": ["src", "vitest.config.ts"]
+	"compilerOptions": {
+		"target": "es2021",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"declaration": true,
+		"outDir": "dist",
+		"jsx": "react",
+		"rootDir": "./src"
+	},
+	"include": ["src", "vitest.config.ts"]
 }

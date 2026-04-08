@@ -1,5 +1,6 @@
+import { StyleProps } from './types';
 
-export interface DividerProps {
+export interface DividerProps extends StyleProps {
 	symbol: string;
 }
 

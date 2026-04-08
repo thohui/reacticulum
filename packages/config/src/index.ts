@@ -21,4 +21,3 @@ export async function loadConfig(configPath: string = CONFIG_FILE): Promise<Reac
 		throw new Error('Config file must export default');
 	}
 }
-
