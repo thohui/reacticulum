@@ -1,7 +1,6 @@
 name: Validate
 
 on:
-  push:
   pull_request:
     branches:
       - master
@@ -23,5 +22,7 @@ jobs:
         run: pnpm run typecheck
       - name: Test
         run: pnpm run test
+      - name: Fetch master for diff
+        run: git fetch origin master --depth=1
       - name: Lint
         run: pnpm run lint
