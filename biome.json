@@ -18,7 +18,20 @@
 		"rules": {
 			"recommended": true,
 			"correctness": {
-				"useJsxKeyInIterable": "off"
+				"useJsxKeyInIterable": "off",
+				"noUnusedFunctionParameters": "warn",
+				"noUnusedImports": "warn"
+			},
+			"suspicious": {
+				"noExplicitAny": "warn"
+			},
+			"style": {
+				"useImportType": "warn",
+				"useNodejsImportProtocol": "warn",
+				"noNonNullAssertion": "warn"
+			},
+			"complexity": {
+				"noBannedTypes": "warn"
 			}
 		}
 	},
@@ -33,7 +46,7 @@
 		"enabled": true,
 		"actions": {
 			"source": {
-				"organizeImports": "on"
+				"organizeImports": "off"
 			}
 		}
 	}
