@@ -13,9 +13,13 @@
 		".": "./src/index.ts"
 	},
 	"packageManager": "pnpm@10.33.0",
+	"scripts": {
+		"typecheck": "tsc --noEmit"
+	},
 	"devDependencies": {
 		"@types/react": "^19.2.14",
 		"tsup": "^8.5.1",
-		"typescript": "^6.0.2"
+		"typescript": "^6.0.2",
+		"@reacticulum/jsx-runtime": "workspace:*"
 	}
 }

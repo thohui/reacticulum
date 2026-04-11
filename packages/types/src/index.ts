@@ -122,15 +122,17 @@ const typeDefaults: Record<MicronType, Omit<ComponentMeta, 'type'>> = {
 	},
 };
 
-const registry = new WeakMap<React.ComponentType<any>, ComponentMeta>();
+type ComponentType = (props: any) => any;
 
-export const register = (component: React.ComponentType<any>, type: MicronType, meta?: Partial<Omit<ComponentMeta, 'type'>>) => {
+const registry = new WeakMap<ComponentType, ComponentMeta>();
+
+export const register = (component: ComponentType, type: MicronType, meta?: Partial<Omit<ComponentMeta, 'type'>>) => {
 	registry.set(component, { type, ...typeDefaults[type], ...meta });
 };
 
 export const getMicronMeta = (component: unknown): ComponentMeta | null => {
 	if (typeof component !== 'function') return null;
-	return registry.get(component as React.ComponentType<any>) ?? null;
+	return registry.get(component as ComponentType) ?? null;
 };
 
 export const getMicronType = (component: unknown): MicronType | null => getMicronMeta(component)?.type ?? null;

@@ -8,5 +8,8 @@
 	"exports": {
 		".": "./src/index.ts",
 		"./jsx-runtime": "./src/index.ts"
+	},
+	"scripts": {
+		"typecheck": "tsc --noEmit"
 	}
 }

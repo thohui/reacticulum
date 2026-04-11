@@ -1,5 +1,5 @@
 import { build } from '@reacticulum/build';
-import { loadConfig, ReacticulumConfig } from '@reacticulum/config';
+import { loadConfig, type ReacticulumConfig } from '@reacticulum/config';
 import cac from 'cac';
 import fs from 'fs';
 
