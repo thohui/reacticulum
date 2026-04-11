@@ -1,7 +1,7 @@
 import { build } from '@reacticulum/build';
 import { loadConfig, type ReacticulumConfig } from '@reacticulum/config';
 import cac from 'cac';
-import fs from 'fs';
+import fs from 'node:fs';
 
 async function resolveConfig(options: Partial<ReacticulumConfig>): Promise<ReacticulumConfig> {
 	const config = await loadConfig();
