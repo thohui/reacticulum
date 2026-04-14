@@ -1,10 +1,8 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"jsx": "react-jsx",
 		"jsxImportSource": "@reacticulum/jsx-runtime",
 		"rootDir": "./src",
 		"outDir": "dist"
-	},
-	"include": ["src"]
+	}
 }

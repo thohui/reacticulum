@@ -48,23 +48,23 @@ test('Divider', () => {
 });
 
 test('Input', () => {
-	expect(serialize(<Input name='name' placeholder='Your name' />)).toBe('`<24|name`Your name>\n');
+	expect(serialize(<Input name='name' placeholder='Your name' />)).toBe('`<24|name`Your name>');
 });
 
 test('Radio', () => {
-	expect(serialize(<Radio group='options' value='option1' label='label1' checked />)).toBe('`<^|options|option1|*`>label1\n');
+	expect(serialize(<Radio group='options' value='option1' label='label1' checked />)).toBe('`<^|options|option1|*`>label1');
 });
 
 test('Checkbox', () => {
-	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' />)).toBe('\n`<?|agree|yes`>Accept terms');
+	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' />)).toBe('`<?|agree|yes`>Accept terms');
 });
 
 test('Checkbox checked', () => {
-	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' checked />)).toBe('\n`<?|agree|yes|*`>Accept terms');
+	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' checked />)).toBe('`<?|agree|yes|*`>Accept terms');
 });
 
 test('Checkbox with color', () => {
-	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' color='0f0' />)).toBe('\n`F0f0`<?|agree|yes`>Accept terms\n`f\n');
+	expect(serialize(<Checkbox fieldName='agree' value='yes' label='Accept terms' color='0f0' />)).toBe('`F0f0`<?|agree|yes`>Accept terms `f');
 });
 
 test('H1 with color', () => {

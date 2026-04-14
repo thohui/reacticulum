@@ -10,7 +10,7 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"typecheck": "tsc --noEmit"
 	},
 	"keywords": [],
 	"author": "",
@@ -19,7 +19,5 @@
 	"dependencies": {
 		"jiti": "^2.6.1"
 	},
-	"devDependencies": {
-		"@types/node": "^25.5.0"
-	}
+	"devDependencies": {}
 }

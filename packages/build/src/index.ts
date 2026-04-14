@@ -1,9 +1,9 @@
 import esbuild from 'esbuild';
-import fs from 'fs/promises';
 import { glob } from 'glob';
-import { createRequire } from 'module';
-import path from 'path';
-import { runInNewContext } from 'vm';
+import fs from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { runInNewContext } from 'node:vm';
 
 const SHEBANG = '#!/usr/bin/env node\n';
 
@@ -23,7 +23,7 @@ process.on('unhandledRejection', (e) => {
 `;
 
 const ESBUILD_ALIAS = {
-	'react': '@reacticulum/jsx-runtime',
+	react: '@reacticulum/jsx-runtime',
 	'react-dom': '@reacticulum/jsx-runtime',
 	'react/jsx-runtime': '@reacticulum/jsx-runtime',
 };

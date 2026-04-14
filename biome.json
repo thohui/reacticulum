@@ -6,7 +6,8 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignoreUnknown": false
+		"ignoreUnknown": false,
+		"includes": ["**", "!playground"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -15,7 +16,23 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"correctness": {
+				"useJsxKeyInIterable": "off",
+				"noUnusedFunctionParameters": "warn",
+				"noUnusedImports": "warn"
+			},
+			"suspicious": {
+				"noExplicitAny": "warn"
+			},
+			"style": {
+				"useImportType": "warn",
+				"useNodejsImportProtocol": "warn",
+				"noNonNullAssertion": "warn"
+			},
+			"complexity": {
+				"noBannedTypes": "warn"
+			}
 		}
 	},
 	"javascript": {
@@ -29,7 +46,7 @@
 		"enabled": true,
 		"actions": {
 			"source": {
-				"organizeImports": "on"
+				"organizeImports": "off"
 			}
 		}
 	}
