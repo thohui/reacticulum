@@ -1,4 +1,4 @@
-import type { Renderer } from "./renderers";
+import type { Renderer } from './renderers';
 
 export type SerializeContext = {
 	/** Serializes a child node using the current context. Passed to handlers for recursion. */

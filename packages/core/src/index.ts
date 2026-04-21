@@ -6,7 +6,7 @@ import { Renderer } from './renderers';
 import { htmlRenderer } from './renderers/html';
 import { micronRenderer } from './renderers/micron';
 
-type ReactElement = { type: unknown; props: any; };
+type ReactElement = { type: unknown; props: any };
 
 export function renderMicron(node: unknown): string {
 	return serializeWith(node, micronRenderer);

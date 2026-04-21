@@ -39,13 +39,11 @@ export const ESBUILD_BASE = {
 	treeShaking: true,
 };
 
-
 // esbuild doesn't support windows paths in the contents property.
 // so we have to convert them to posix style before passing to esbuild.
 export const posix = (p: string) => p.replaceAll('\\', '/');
 
 const require = createRequire(import.meta.url);
-
 
 /**
  * Bundles a string of code with esbuild and runs it in memory, returning its exports.
@@ -60,7 +58,6 @@ export async function evalBundle<T extends object>(
 		vmContext?: Record<string, unknown>;
 	} = {},
 ): Promise<T> {
-
 	const result = await esbuild.build({
 		...ESBUILD_BASE,
 		minify: false,
@@ -69,7 +66,7 @@ export async function evalBundle<T extends object>(
 		write: false,
 	});
 
-	const module: { exports: T; } = { exports: {} as T };
+	const module: { exports: T } = { exports: {} as T };
 
 	// This file is ESM, but esbuild outputs CJS. CJS needs globals like `module` and `exports`
 	// that don't exist in ESM, so plain eval() won't work. runInNewContext lets us spin up a
@@ -85,7 +82,6 @@ export async function evalBundle<T extends object>(
 	});
 
 	return module.exports;
-
 }
 
 interface PageConfig {
@@ -141,12 +137,10 @@ export async function build(options: BuildOptions) {
 	);
 
 	console.log('build complete');
-
 }
 
 /** Builds a static page bundle. */
 async function buildStatic(options: BuildOptions, pagePath: string, name: string) {
-
 	const { pagesDir, outDir } = options;
 
 	const entryContents = `
@@ -177,7 +171,6 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 	await fs.chmod(outPath, '644');
 
 	console.log(`static  => ${outPath}`);
-
 }
 
 /** Builds a dynamic page bundle. */

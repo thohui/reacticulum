@@ -1,13 +1,12 @@
-import { ComponentMeta } from "@reacticulum/types";
-import { Renderer } from ".";
-import { SerializeContext } from "../context";
-import { micronHandlers } from "../handlers/micron";
-import { buildSuffix, escapeMarkdown, stylePrefix } from "../utils/styles";
+import { ComponentMeta } from '@reacticulum/types';
+import { Renderer } from '.';
+import { SerializeContext } from '../context';
+import { micronHandlers } from '../handlers/micron';
+import { buildSuffix, escapeMarkdown, stylePrefix } from '../utils/styles';
 
 export const micronRenderer: Renderer = {
 	escapeText: escapeMarkdown,
 	render(meta: ComponentMeta, props: any, ctx: SerializeContext): string {
-
 		const prefixTokens = stylePrefix(props, meta.canHaveColor, meta.canHaveFormatting);
 
 		const newlinePrefix = meta.startsWithNewLine ? '\n' : '';
@@ -23,7 +22,5 @@ export const micronRenderer: Renderer = {
 		const body = content.replace(/^(>*)/, (_, headingMarker) => headingMarker + prefixTokens);
 
 		return newlinePrefix + body + suffixTokens;
-
 	},
 };
-

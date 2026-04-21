@@ -23,37 +23,33 @@ cli
 		await build(config);
 	});
 
-cli
-	.command('watch', 'Watch pages directory and rebuild on changes')
-	.action(async (options) => {
-		const config = await resolveConfig({
-			...(options.pagesDir && { pagesDir: options.pagesDir }),
-			...(options.outDir && { outDir: options.outDir }),
-		});
-
-		await build(config);
-
-		chokidar.watch(config.pagesDir).on('change', async () => {
-			console.log('file change detected, rebuilding...');
-			await build(config);
-		});
-
-		console.log(`watching ${config.pagesDir}`);
+cli.command('watch', 'Watch pages directory and rebuild on changes').action(async (options) => {
+	const config = await resolveConfig({
+		...(options.pagesDir && { pagesDir: options.pagesDir }),
+		...(options.outDir && { outDir: options.outDir }),
 	});
+
+	await build(config);
+
+	chokidar.watch(config.pagesDir).on('change', async () => {
+		console.log('file change detected, rebuilding...');
+		await build(config);
+	});
+
+	console.log(`watching ${config.pagesDir}`);
+});
 
 cli
 	.command('serve', 'Start a dev server')
 	.option('--pages-dir <dir>', 'Pages directory')
 	.option('--port <port>', 'Port to listen on')
 	.action(async (options) => {
-
 		const config = await resolveConfig({
 			...(options.pagesDir && { pagesDir: options.pagesDir }),
 			...(options.port && { port: Number(options.port) }),
 		});
 
 		await startServer({ pagesDir: config.pagesDir, port: options.port });
-
 	});
 
 cli.help();

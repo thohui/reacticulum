@@ -13,8 +13,11 @@ export interface ServerOptions {
 	port?: number;
 }
 
+/**
+ * Starts a development server that builds reacticulum pages on demand.
+ * The server watches the pages directory for changes and notifies clients to hot reload when a change is detected.
+ **/
 export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
-
 	if (await isPortInUse(port)) {
 		console.error(`Port ${port} is already in use.`);
 		process.exit(1);
@@ -25,29 +28,26 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 
 	const app = new Hono();
 
-	// Endpoint for clients to connect to for hot reload events.
+	// SSE Endpoint for clients to connect to for hot reload events.
 	app.get('/__reload', (c) => {
-
 		const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
 		const writer = writable.getWriter();
 		clients.add(writer);
 
 		c.req.raw.signal.addEventListener('abort', () => {
 			clients.delete(writer);
-			writer.close().catch(() => { });
+			writer.close().catch(() => {});
 		});
 
 		return new Response(readable, {
 			headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' },
 		});
-
 	});
 
 	// Redirect root to /index for convenience.
 	app.get('/', (c) => c.redirect('/index'));
 
 	app.get('/:page', async (c) => {
-
 		let pageName = c.req.param('page');
 
 		// Strip .html extension if present so both /about and /about.html will work.
@@ -58,7 +58,9 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 		console.log(`Request for page: ${pageName}`);
 		const pagePath = path.join(resolvedPagesDir, `${pageName}.tsx`);
 
-		if (!fs.existsSync(pagePath)) return c.text('Page not found', 404);
+		if (!fs.existsSync(pagePath)) {
+			return c.text('Page not found', 404);
+		}
 
 		const entryContents = `
 			import '@reacticulum/components'
@@ -69,10 +71,10 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 				const tree = await Page({})
 				return renderHTML(tree)
 			}
-		`;
+			`;
 
 		try {
-			const exports = await evalBundle<{ render: () => Promise<string>; }>(entryContents, resolvedPagesDir);
+			const exports = await evalBundle<{ render: () => Promise<string> }>(entryContents, resolvedPagesDir);
 			const body = await exports.render();
 			return c.html(htmlEntryPoint(pageName, body));
 		} catch (err) {
@@ -81,6 +83,7 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 		}
 	});
 
+	// Watch the pages directory for changes and notify clients to reload when a change is detected.
 	chokidar.watch(resolvedPagesDir).on('change', () => {
 		const event = encoder.encode('data: reload\n\n');
 		for (const client of clients) {
@@ -122,11 +125,13 @@ ${body}
 </html>`;
 }
 
-
 function isPortInUse(port: number): Promise<boolean> {
 	return new Promise((resolve) => {
 		const server = net.createServer().listen(port);
-		server.on('listening', () => { server.close(); resolve(false); });
+		server.on('listening', () => {
+			server.close();
+			resolve(false);
+		});
 		server.on('error', () => resolve(true));
 	});
 }
