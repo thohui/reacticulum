@@ -1,5 +1,5 @@
 import { serve } from '@hono/node-server';
-import { evalBundle, posix } from '@reacticulum/build';
+import { evalBundle, pageDefines, posix } from '@reacticulum/build';
 import chokidar from 'chokidar';
 import { Hono } from 'hono';
 import fs from 'node:fs';
@@ -71,10 +71,12 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 				const tree = await Page({})
 				return renderHTML(tree)
 			}
-			`;
+		`;
 
 		try {
-			const exports = await evalBundle<{ render: () => Promise<string> }>(entryContents, resolvedPagesDir);
+			const exports = await evalBundle<{ render: () => Promise<string> }>(entryContents, resolvedPagesDir, {
+				esbuildOverrides: { define: pageDefines(pageName) },
+			});
 			const body = await exports.render();
 			return c.html(htmlEntryPoint(pageName, body));
 		} catch (err) {

@@ -66,7 +66,7 @@ export async function evalBundle<T extends object>(
 		write: false,
 	});
 
-	const module: { exports: T } = { exports: {} as T };
+	const module: { exports: T; } = { exports: {} as T };
 
 	// This file is ESM, but esbuild outputs CJS. CJS needs globals like `module` and `exports`
 	// that don't exist in ESM, so plain eval() won't work. runInNewContext lets us spin up a
@@ -96,6 +96,10 @@ export interface BuildOptions {
 	pagesDir: string;
 	outDir: string;
 }
+
+
+// Defines global constants for a page bundle, which can be used for logic in page code.
+export const pageDefines = (pageName: string) => ({ REACTICULUM_PAGE: JSON.stringify(pageName) });
 
 // Common setup shared by every page bundle
 function pageImports(pagePath: string): string {
@@ -154,7 +158,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 	const exports = await evalBundle<PageExports>(entryContents, path.resolve(pagesDir), {
 		esbuildOverrides: {
 			minify: true,
-			define: { REACTICULUM_PAGE: JSON.stringify(name) },
+			define: pageDefines(name),
 		},
 		vmContext: {
 			__dirname: path.resolve(pagesDir),
@@ -207,9 +211,7 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 		},
 		outfile: outPath,
 		banner: { js: SHEBANG + GUARD },
-		define: {
-			REACTICULUM_PAGE: JSON.stringify(name),
-		},
+		define: pageDefines(name),
 	});
 
 	if (process.platform !== 'win32') await fs.chmod(outPath, '755');
