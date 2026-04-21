@@ -22,140 +22,178 @@ process.on('unhandledRejection', (e) => {
 })
 `;
 
-const ESBUILD_ALIAS = {
+// Point React imports at our own JSX runtime.
+export const ESBUILD_ALIAS = {
 	react: '@reacticulum/jsx-runtime',
 	'react-dom': '@reacticulum/jsx-runtime',
 	'react/jsx-runtime': '@reacticulum/jsx-runtime',
 };
 
-const ESBUILD_COMMON = {
+// Base esbuild config shared with the vite plugin. minify is left out so each caller sets it.
+export const ESBUILD_BASE = {
 	alias: ESBUILD_ALIAS,
 	jsx: 'automatic' as const,
 	platform: 'node' as const,
 	format: 'cjs' as const,
 	bundle: true,
-	minify: true,
 	treeShaking: true,
 };
+
+
+// esbuild doesn't support windows paths in the contents property.
+// so we have to convert them to posix style before passing to esbuild.
+export const posix = (p: string) => p.replaceAll('\\', '/');
+
+const require = createRequire(import.meta.url);
+
+
+/**
+ * Bundles a string of code with esbuild and runs it in memory, returning its exports.
+ * Nothing is written to disk. Used to render pages at build time.
+ */
+export async function evalBundle<T extends object>(
+	entryContents: string,
+	resolveDir: string,
+	options: {
+		esbuildOverrides?: Partial<Parameters<typeof esbuild.build>[0]>;
+		// Extra globals to expose in the sandbox, e.g. __dirname, __filename.
+		vmContext?: Record<string, unknown>;
+	} = {},
+): Promise<T> {
+
+	const result = await esbuild.build({
+		...ESBUILD_BASE,
+		minify: false,
+		...options.esbuildOverrides,
+		stdin: { contents: entryContents, resolveDir, loader: 'tsx' },
+		write: false,
+	});
+
+	const module: { exports: T; } = { exports: {} as T };
+
+	// This file is ESM, but esbuild outputs CJS. CJS needs globals like `module` and `exports`
+	// that don't exist in ESM, so plain eval() won't work. runInNewContext lets us spin up a
+	// fresh context and inject those globals manually. It also means there's no file to write
+	// to disk just to require() it back.
+	runInNewContext(result.outputFiles[0].text, {
+		exports: module.exports,
+		module: module,
+		require,
+		process,
+		console,
+		...options.vmContext,
+	});
+
+	return module.exports;
+
+}
+
+interface PageConfig {
+	config?: Record<string, unknown>;
+}
+
+interface PageExports {
+	render: () => Promise<string>;
+}
 
 export interface BuildOptions {
 	pagesDir: string;
 	outDir: string;
 }
 
-// esbuild doesn't support windows paths in the contents property.
-// so we have to convert them to posix style before passing to esbuild.
-const posix = (p: string) => p.replaceAll('\\', '/');
-
-async function loadPageConfig(pagePath: string, pagesDir: string) {
-	const result = await esbuild.build({
-		...ESBUILD_COMMON,
-		stdin: {
-			contents: `import * as _mod from '${posix(path.resolve(pagePath))}'; export const config = _mod?.config ?? {};`,
-			resolveDir: path.resolve(pagesDir),
-			loader: 'tsx',
-		},
-		write: false,
-	});
-
-	const mod: any = { exports: {} };
-	runInNewContext(result.outputFiles[0].text, {
-		exports: mod.exports,
-		module: mod,
-		require: createRequire(import.meta.url),
-		process,
-		console,
-	});
-
-	return mod.exports.config ?? {};
+// Common setup shared by every page bundle
+function pageImports(pagePath: string): string {
+	return `
+    import '@reacticulum/components'
+    import { renderMicron } from '@reacticulum/core'
+    import * as _mod from '${posix(path.resolve(pagePath))}'
+    const Page = _mod.default ?? _mod`;
 }
 
+/** Attempts to load a page's configuration object. */
+async function loadPageConfig(pagePath: string, pagesDir: string) {
+	// TODO: make the page configuration typed and export an interface for it from @reacticulum/types or something.
+	const exports = await evalBundle<PageConfig>(
+		`import * as _mod from '${posix(path.resolve(pagePath))}'; export const config = _mod?.config ?? {};`,
+		path.resolve(pagesDir),
+	);
+	return exports.config ?? {};
+}
+
+/** Builds all pages in the specified directory. */
 export async function build(options: BuildOptions) {
 	const { pagesDir, outDir } = options;
 
-	const parsedOutDir = path.parse(outDir);
-	const parsedPagesDir = path.parse(pagesDir);
-
-	await fs.mkdir(parsedOutDir.dir, { recursive: true });
+	await fs.mkdir(outDir, { recursive: true });
 
 	const pages = await glob(`${pagesDir}/**/*.{jsx,tsx}`);
 
-	for (const pagePath of pages) {
-		const config = await loadPageConfig(pagePath, parsedPagesDir.dir);
-		const name = path.basename(pagePath, path.extname(pagePath));
-		const isDynamic = config.dynamic ?? false;
-
-		if (isDynamic) {
-			await buildDynamic(options, pagePath, name);
-		} else {
-			await buildStatic(options, pagePath, name);
-		}
-	}
+	await Promise.all(
+		pages.map(async (pagePath) => {
+			const config = await loadPageConfig(pagePath, path.dirname(pagesDir));
+			const name = path.basename(pagePath, path.extname(pagePath));
+			if (config.dynamic) {
+				await buildDynamic(options, pagePath, name);
+			} else {
+				await buildStatic(options, pagePath, name);
+			}
+		}),
+	);
 
 	console.log('build complete');
+
 }
 
+/** Builds a static page bundle. */
 async function buildStatic(options: BuildOptions, pagePath: string, name: string) {
-	const entryContents = `
-    import '@reacticulum/components'
-    import { serialize } from '@reacticulum/core'
-    import * as _mod from '${posix(path.resolve(pagePath))}'
-    const Page = _mod.default ?? _mod
-    export const render = async () => {
-      const tree = await Page({})
-      return serialize(tree)
-    }
-  `;
 
 	const { pagesDir, outDir } = options;
 
-	const result = await esbuild.build({
-		...ESBUILD_COMMON,
-		stdin: {
-			contents: entryContents,
-			resolveDir: path.resolve(pagesDir),
-			loader: 'tsx',
+	const entryContents = `
+	${pageImports(pagePath)}
+    export const render = async () => {
+      const tree = await Page({})
+      return renderMicron(tree)
+    }
+  `;
+
+	const exports = await evalBundle<PageExports>(entryContents, path.resolve(pagesDir), {
+		esbuildOverrides: {
+			minify: true,
+			define: { REACTICULUM_PAGE: JSON.stringify(name) },
 		},
-		write: false,
-		define: {
-			REACTICULUM_PAGE: JSON.stringify(name),
+		vmContext: {
+			__dirname: path.resolve(pagesDir),
+			__filename: path.resolve(pagePath),
 		},
 	});
 
-	const code = result.outputFiles[0].text;
-	const mod: any = { exports: {} };
-
-	runInNewContext(code, {
-		exports: mod.exports,
-		module: mod,
-		require: createRequire(import.meta.url),
-		process,
-		console,
-		__dirname: path.resolve(pagesDir),
-		__filename: path.resolve(pagePath),
-	});
-
-	const micron = await mod.exports.render();
+	const micron = await exports.render();
 	const outPath = path.join(outDir, `${name}.mu`);
 	await fs.writeFile(outPath, micron);
-	if (process.platform !== 'win32') await fs.chmod(outPath, '644');
+
+	// Make the output file read only.
+	// If a page was previously dynamic, but is now dynamic. nomadnet would still think it's dynamic and try to execute it.
+	await fs.chmod(outPath, '644');
+
 	console.log(`static  => ${outPath}`);
+
 }
 
+/** Builds a dynamic page bundle. */
 async function buildDynamic(options: BuildOptions, pagePath: string, name: string) {
 	const { outDir, pagesDir } = options;
 
-	const outPath = path.join(path.resolve(outDir), `${name}.mu`);
+	const outPath = path.join(outDir, `${name}.mu`);
+
+	const pageImportsContent = pageImports(pagePath);
 
 	const entryContents = `
-    import '@reacticulum/components'
-    import { serialize } from '@reacticulum/core'
-    import * as _mod from '${posix(path.resolve(pagePath))}'
-    const Page = _mod.default ?? _mod
+	${pageImportsContent}
     const serve = async (Component) => {
       try {
         const tree = await Component(process.env)
-        process.stdout.write(serialize(tree))
+        process.stdout.write(renderMicron(tree))
       } catch (e) {
         process.stdout.write('#Error\\n')
         process.stdout.write('Something went wrong.\\n')
@@ -167,7 +205,8 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
   `;
 
 	await esbuild.build({
-		...ESBUILD_COMMON,
+		...ESBUILD_BASE,
+		minify: true,
 		stdin: {
 			contents: entryContents,
 			resolveDir: path.resolve(pagesDir),
@@ -181,5 +220,5 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 	});
 
 	if (process.platform !== 'win32') await fs.chmod(outPath, '755');
-	console.log(`dynamic => ${path.join(outDir, `${name}.mu`)}`);
+	console.log(`dynamic => ${outPath}`);
 }
