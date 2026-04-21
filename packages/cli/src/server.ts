@@ -36,7 +36,7 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 
 		c.req.raw.signal.addEventListener('abort', () => {
 			clients.delete(writer);
-			writer.close().catch(() => {});
+			writer.close().catch(() => { });
 		});
 
 		return new Response(readable, {
@@ -51,7 +51,7 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 		let pageName = c.req.param('page');
 
 		// Strip .html extension if present so both /about and /about.html will work.
-		if (pageName.endsWith('.html')) {
+		if (pageName.endsWith('.html') && pageName.length > 5) {
 			pageName = pageName.slice(0, -5);
 		}
 
@@ -74,7 +74,7 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 		`;
 
 		try {
-			const exports = await evalBundle<{ render: () => Promise<string> }>(entryContents, resolvedPagesDir, {
+			const exports = await evalBundle<{ render: () => Promise<string>; }>(entryContents, resolvedPagesDir, {
 				esbuildOverrides: { define: pageDefines(pageName) },
 			});
 			const body = await exports.render();
