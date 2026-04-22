@@ -66,7 +66,7 @@ export async function evalBundle<T extends object>(
 		write: false,
 	});
 
-	const module: { exports: T; } = { exports: {} as T };
+	const module: { exports: T } = { exports: {} as T };
 
 	// This file is ESM, but esbuild outputs CJS. CJS needs globals like `module` and `exports`
 	// that don't exist in ESM, so plain eval() won't work. runInNewContext lets us spin up a
@@ -96,7 +96,6 @@ export interface BuildOptions {
 	pagesDir: string;
 	outDir: string;
 }
-
 
 // Defines global constants for a page bundle, which can be used for logic in page code.
 export const pageDefines = (pageName: string) => ({ REACTICULUM_PAGE: JSON.stringify(pageName) });
@@ -130,8 +129,7 @@ export async function build(options: BuildOptions) {
 
 	await Promise.all(
 		pages.map(async (pagePath) => {
-
-			// We have to load the page config before building so we know whether it's dynamic or static. 
+			// We have to load the page config before building so we know whether it's dynamic or static.
 			// If it's dynamic, we build a different bundle that executes at runtime instead of build time.
 			// This is a bit ineffecient, since we are "building" the page twice but it's fine for now.
 
