@@ -130,6 +130,11 @@ export async function build(options: BuildOptions) {
 
 	await Promise.all(
 		pages.map(async (pagePath) => {
+
+			// We have to load the page config before building so we know whether it's dynamic or static. 
+			// If it's dynamic, we build a different bundle that executes at runtime instead of build time.
+			// This is a bit ineffecient, since we are "building" the page twice but it's fine for now.
+
 			const config = await loadPageConfig(pagePath, path.dirname(pagesDir));
 			const name = path.basename(pagePath, path.extname(pagePath));
 			if (config.dynamic) {
@@ -171,7 +176,7 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 	await fs.writeFile(outPath, micron);
 
 	// Make the output file read only.
-	// If a page was previously dynamic, but is now dynamic. nomadnet would still think it's dynamic and try to execute it.
+	// If a page was previously dynamic, but is now dynamic nomadnet would still think it's dynamic and try to execute it which fails.
 	await fs.chmod(outPath, '644');
 
 	console.log(`static  => ${outPath}`);
@@ -214,6 +219,8 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 		define: pageDefines(name),
 	});
 
-	if (process.platform !== 'win32') await fs.chmod(outPath, '755');
+	// Make the output file executable.
+	await fs.chmod(outPath, '755');
+
 	console.log(`dynamic => ${outPath}`);
 }
