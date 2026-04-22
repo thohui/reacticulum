@@ -6,7 +6,8 @@ import { startServer } from './server';
 
 async function resolveConfig(options?: Partial<ReacticulumConfig>): Promise<ReacticulumConfig> {
 	const config = await loadConfig();
-	return { ...config, ...options };
+	const overrides = Object.fromEntries(Object.entries(options ?? {}).filter(([, v]) => v != null));
+	return { ...config, ...overrides };
 }
 
 const cli = cac('reacticulum');
@@ -16,18 +17,12 @@ cli
 	.option('--pages-dir <dir>', 'Pages directory')
 	.option('--out-dir <dir>', 'Output directory')
 	.action(async (options) => {
-		const config = await resolveConfig({
-			...(options.pagesDir && { pagesDir: options.pagesDir }),
-			...(options.outDir && { outDir: options.outDir }),
-		});
+		const config = await resolveConfig({ pagesDir: options.pagesDir, outDir: options.outDir });
 		await build(config);
 	});
 
 cli.command('watch', 'Watch pages directory and rebuild on changes').action(async (options) => {
-	const config = await resolveConfig({
-		...(options.pagesDir && { pagesDir: options.pagesDir }),
-		...(options.outDir && { outDir: options.outDir }),
-	});
+	const config = await resolveConfig({ pagesDir: options.pagesDir, outDir: options.outDir });
 
 	await build(config);
 
@@ -44,12 +39,11 @@ cli
 	.option('--pages-dir <dir>', 'Pages directory')
 	.option('--port <port>', 'Port to listen on')
 	.action(async (options) => {
-		const config = await resolveConfig({
-			...(options.pagesDir && { pagesDir: options.pagesDir }),
-			...(options.port && { port: Number(options.port) }),
-		});
+		const config = await loadConfig();
+		const pagesDir = options.pagesDir ?? config.pagesDir;
+		const port = options.port ? Number(options.port) : undefined;
 
-		await startServer({ pagesDir: config.pagesDir, port: options.port });
+		await startServer({ pagesDir, port });
 	});
 
 cli.help();

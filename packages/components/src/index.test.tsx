@@ -1,4 +1,4 @@
-import { renderMicron } from '@reacticulum/core';
+import { renderHTML, renderMicron } from '@reacticulum/core';
 import React from 'react';
 import { expect, test } from 'vitest';
 import { Align, Bold, Checkbox, Color, Divider, H1, H2, H3, Input, Italic, Link, Paragraph, Radio, Underline } from '.';
@@ -82,4 +82,99 @@ test('composition', () => {
 			</>,
 		),
 	).toBe('>My Node\n`!Welcome`!\n-*\n`[About`about]`');
+});
+
+// renderHTML
+
+test('html H1', () => {
+	expect(renderHTML(<H1>Hello</H1>)).toBe('<h1>Hello</h1>');
+});
+
+test('html H2', () => {
+	expect(renderHTML(<H2>Hello</H2>)).toBe('<h2>Hello</h2>');
+});
+
+test('html H3', () => {
+	expect(renderHTML(<H3>Hello</H3>)).toBe('<h3>Hello</h3>');
+});
+
+test('html Bold', () => {
+	expect(renderHTML(<Bold>bold</Bold>)).toBe('<strong>bold</strong>');
+});
+
+test('html Italic', () => {
+	expect(renderHTML(<Italic>italic</Italic>)).toBe('<em>italic</em>');
+});
+
+test('html Underline', () => {
+	expect(renderHTML(<Underline>underline</Underline>)).toBe('<u>underline</u>');
+});
+
+test('html Color', () => {
+	expect(renderHTML(<Color hex='f00'>Red</Color>)).toBe('<span style="color:#f00">Red</span>');
+});
+
+test('html Link', () => {
+	expect(renderHTML(<Link to='about'>About</Link>)).toBe('<a href="about">About</a>');
+});
+
+test('html Paragraph', () => {
+	expect(renderHTML(<Paragraph>hello</Paragraph>)).toBe('<p>hello</p>');
+});
+
+test('html Align', () => {
+	expect(renderHTML(<Align align='center' />)).toBe('<div style="display:flex;justify-content:center"></div>');
+});
+
+test('html Divider', () => {
+	expect(renderHTML(<Divider symbol='*' />)).toBe('<hr />');
+});
+
+test('html Input', () => {
+	expect(renderHTML(<Input name='name' placeholder='Your name' />)).toBe('<input type="text" name="name" placeholder="Your name" size="24" />');
+});
+
+test('html Radio', () => {
+	expect(renderHTML(<Radio group='options' value='option1' label='label1' checked />)).toBe(
+		'<label><input type="radio" name="options" value="option1" checked />label1</label>',
+	);
+});
+
+test('html Checkbox', () => {
+	expect(renderHTML(<Checkbox fieldName='agree' value='yes' label='Accept terms' />)).toBe(
+		'<label><input type="checkbox" name="agree" value="yes" />Accept terms</label>',
+	);
+});
+
+test('html Checkbox checked', () => {
+	expect(renderHTML(<Checkbox fieldName='agree' value='yes' label='Accept terms' checked />)).toBe(
+		'<label><input type="checkbox" name="agree" value="yes" checked />Accept terms</label>',
+	);
+});
+
+test('html Checkbox with color', () => {
+	expect(renderHTML(<Checkbox fieldName='agree' value='yes' label='Accept terms' color='0f0' />)).toBe(
+		'<label><input type="checkbox" name="agree" value="yes" />Accept terms</label>',
+	);
+});
+
+test('html H1 with color', () => {
+	expect(renderHTML(<H1 color='f00'>Red heading</H1>)).toBe('<h1 style="color:f00">Red heading</h1>');
+});
+
+test('html xss', () => {
+	expect(renderHTML(<Link to='"><script>alert(1)</script>'>click</Link>)).toBe('<a href="&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;">click</a>');
+});
+
+test('html composition', () => {
+	expect(
+		renderHTML(
+			<>
+				<H1>My Node</H1>
+				<Bold>Welcome</Bold>
+				<Divider symbol='*' />
+				<Link to='about'>About</Link>
+			</>,
+		),
+	).toBe('<h1>My Node</h1><strong>Welcome</strong><hr /><a href="about">About</a>');
 });

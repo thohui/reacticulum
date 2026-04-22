@@ -1,15 +1,24 @@
 import type { MicronType } from '@reacticulum/types';
-import { escapeHtml } from '../utils/styles';
+import { escapeHTML } from '../utils/styles';
 import type { Handler } from './handler';
+
+function normalizeAlign(align: string | undefined): string | undefined {
+	if (!align) return undefined;
+	if (align === 'left' || align === 'center' || align === 'right') return align;
+	return undefined;
+}
 
 function styleAttr(props: Record<string, any>): string {
 	const s: string[] = [];
-	if (props.color) s.push(`color:${escapeHtml(props.color)}`);
-	if (props.backgroundColor) s.push(`background-color:${escapeHtml(props.backgroundColor)}`);
+	if (props.color) s.push(`color:${escapeHTML(props.color)}`);
+	if (props.backgroundColor) s.push(`background-color:${escapeHTML(props.backgroundColor)}`);
 	if (props.bold) s.push('font-weight:bold');
 	if (props.italic) s.push('font-style:italic');
 	if (props.underline) s.push('text-decoration:underline');
-	if (props.align) s.push(`text-align:${props.align}`);
+
+	const normalizedAlign = normalizeAlign(props.align);
+	if (normalizedAlign) s.push(`text-align:${normalizedAlign}`);
+
 	return s.length ? ` style="${s.join(';')}"` : '';
 }
 
@@ -20,22 +29,24 @@ export const htmlHandlers: Record<MicronType, Handler> = {
 	bold: (props, ctx) => `<strong${styleAttr(props)}>${ctx.serialize(props.children)}</strong>`,
 	italic: (props, ctx) => `<em${styleAttr(props)}>${ctx.serialize(props.children)}</em>`,
 	underline: (props, ctx) => `<u${styleAttr(props)}>${ctx.serialize(props.children)}</u>`,
-	link: ({ children, to, ...styles }, ctx) => `<a href="${escapeHtml(to)}"${styleAttr(styles)}>${ctx.serialize(children)}</a>`,
+	link: ({ children, to, ...styles }, ctx) => `<a href="${escapeHTML(to)}"${styleAttr(styles)}>${ctx.serialize(children)}</a>`,
 	divider: () => `<hr />`,
-	color: ({ hex, children }, ctx) => `<span style="color:#${escapeHtml(hex)}">${ctx.serialize(children)}</span>`,
+	color: ({ hex, children }, ctx) => `<span style="color:#${escapeHTML(hex)}">${ctx.serialize(children)}</span>`,
 	paragraph: (props, ctx) => `<p${styleAttr(props)}>${ctx.serialize(props.children)}</p>`,
 	align: ({ align, children }, ctx) => {
 		const justifyContent = align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start';
 		return `<div style="display:flex;justify-content:${justifyContent}">${ctx.serialize(children)}</div>`;
 	},
 	input: ({ name, placeholder, passWord, width = 24 }) =>
-		`<input type="${passWord ? 'password' : 'text'}" name="${escapeHtml(name)}" placeholder="${escapeHtml(placeholder ?? '')}" size="${width}" />`,
+		`<input type="${passWord ? 'password' : 'text'}" name="${escapeHTML(name)}" placeholder="${escapeHTML(placeholder ?? '')}" size="${width}" />`,
 	checkbox: ({ fieldName, value, label, checked, align }) => {
-		const inner = `<label><input type="checkbox" name="${escapeHtml(fieldName)}" value="${escapeHtml(value)}"${checked ? ' checked' : ''} />${label ? escapeHtml(label) : ''}</label>`;
-		return align ? `<div style="text-align:${align}">${inner}</div>` : inner;
+		const inner = `<label><input type="checkbox" name="${escapeHTML(fieldName)}" value="${escapeHTML(value)}"${checked ? ' checked' : ''} />${label ? escapeHTML(label) : ''}</label>`;
+		const normalizedAlign = normalizeAlign(align);
+		return normalizedAlign ? `<div style="text-align:${normalizedAlign}">${inner}</div>` : inner;
 	},
 	radio: ({ group, value, label, checked, align }) => {
-		const inner = `<label><input type="radio" name="${escapeHtml(group)}" value="${escapeHtml(value)}"${checked ? ' checked' : ''} />${label ? escapeHtml(label) : ''}</label>`;
-		return align ? `<div style="text-align:${align}">${inner}</div>` : inner;
+		const inner = `<label><input type="radio" name="${escapeHTML(group)}" value="${escapeHTML(value)}"${checked ? ' checked' : ''} />${label ? escapeHTML(label) : ''}</label>`;
+		const normalizedAlign = normalizeAlign(align);
+		return normalizedAlign ? `<div style="text-align:${normalizedAlign}">${inner}</div>` : inner;
 	},
 };

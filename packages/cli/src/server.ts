@@ -78,10 +78,10 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 				esbuildOverrides: { define: pageDefines(pageName) },
 			});
 			const body = await exports.render();
-			return c.html(htmlEntryPoint(pageName, body));
+			return c.html(htmlEntryPoint(escapeHTML(pageName), body));
 		} catch (err) {
 			const message = err instanceof Error ? err.message : String(err);
-			return c.html(htmlEntryPoint(pageName, `<pre style="color:#f87171">${message}</pre>`), 500);
+			return c.html(htmlEntryPoint(escapeHTML(pageName), `<pre style="color:#f87171">${escapeHTML(message)}</pre>`), 500);
 		}
 	});
 
@@ -136,4 +136,8 @@ function isPortInUse(port: number): Promise<boolean> {
 		});
 		server.on('error', () => resolve(true));
 	});
+}
+
+function escapeHTML(str: string) {
+	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
