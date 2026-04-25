@@ -1,14 +1,25 @@
 import { getMicronMeta } from '@reacticulum/types';
-import { SerializeContext } from './context';
-import { micronHandlers } from './handlers/micron';
+import type { SerializeContext } from './context';
+
 import { nativeHandlers } from './handlers/native';
-import { buildSuffix, escapeMarkdown, stylePrefix } from './utils/styles';
+import type { Renderer } from './renderers';
+import { htmlRenderer } from './renderers/html';
+import { micronRenderer } from './renderers/micron';
 
 type ReactElement = { type: unknown; props: any };
 
-export function serialize(node: unknown): string {
+export function renderMicron(node: unknown): string {
+	return serializeWith(node, micronRenderer);
+}
+
+export function renderHTML(node: unknown): string {
+	return serializeWith(node, htmlRenderer);
+}
+
+function serializeWith(node: unknown, renderer: Renderer): string {
 	const ctx: SerializeContext = {
 		serialize: null as any,
+		renderer: renderer,
 	};
 	ctx.serialize = (node) => serializeNode(node, ctx);
 	return serializeNode(node, ctx);
@@ -17,7 +28,11 @@ export function serialize(node: unknown): string {
 function serializeNode(node: unknown, ctx: SerializeContext): string {
 	if (node === null || node === undefined) return '';
 	if (typeof node === 'boolean') return '';
-	if (typeof node === 'string' || typeof node === 'number') return escapeMarkdown(String(node));
+
+	if (typeof node === 'string' || typeof node === 'number') {
+		return ctx.renderer.escapeText(String(node));
+	}
+
 	if (Array.isArray(node)) return node.map((n) => serializeNode(n, ctx)).join('');
 
 	const el = node as ReactElement;
@@ -28,22 +43,7 @@ function serializeNode(node: unknown, ctx: SerializeContext): string {
 
 	// Registered micron component
 	const meta = getMicronMeta(type);
-
-	if (meta) {
-		const tokens = stylePrefix(props, meta.canHaveColor, meta.canHaveFormatting);
-
-		const newlinePrefix = meta.startsWithNewLine ? '\n' : '';
-
-		const handler = micronHandlers[meta.type];
-		const content = handler(props, ctx);
-
-		const suffix = buildSuffix(props, meta.canHaveColor, meta.endsWithNewLine, meta.startsWithNewLine);
-		// tokens must come after '>' not before — micron ignores styles before the heading
-		// marker. any '>' here is from the handler, not user content (escapeMarkdown
-		// turns user '>' into '\>').
-		const body = content.replace(/^(>*)/, (_, headingMarker) => headingMarker + tokens);
-		return newlinePrefix + body + suffix;
-	}
+	if (meta) return ctx.renderer.render(meta, props, ctx);
 
 	// Native HTML element
 	if (typeof type === 'string') {

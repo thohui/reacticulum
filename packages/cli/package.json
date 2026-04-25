@@ -22,12 +22,16 @@
 	"license": "ISC",
 	"packageManager": "pnpm@10.33.0",
 	"dependencies": {
-		"@reacticulum/config": "workspace:^",
+		"@hono/node-server": "^2.0.0",
 		"@reacticulum/build": "workspace:^",
+		"@reacticulum/config": "workspace:^",
 		"cac": "^7.0.0",
+		"chokidar": "^5.0.0",
+		"hono": "^4.12.14",
 		"jiti": "^2.6.1"
 	},
 	"devDependencies": {
+		"@types/ws": "^8.18.1",
 		"tsdown": "^0.21.7"
 	}
 }

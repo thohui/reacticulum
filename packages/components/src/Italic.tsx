@@ -1,8 +1,6 @@
-import { StyleProps } from './types';
+import type { ItalicProps } from '@reacticulum/types';
+export type { ItalicProps };
 
-export interface ItalicProps extends StyleProps {
-	children: React.ReactNode;
-}
 export function Italic({ children, align, backgroundColor, bold, color, italic, underline }: ItalicProps) {
 	return null;
 }

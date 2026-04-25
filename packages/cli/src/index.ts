@@ -1,50 +1,33 @@
 import { build } from '@reacticulum/build';
 import { loadConfig, type ReacticulumConfig } from '@reacticulum/config';
 import cac from 'cac';
-import fs from 'node:fs';
+import { startServer } from './server';
 
-async function resolveConfig(options: Partial<ReacticulumConfig>): Promise<ReacticulumConfig> {
+async function resolveConfig(options?: Partial<ReacticulumConfig>): Promise<ReacticulumConfig> {
 	const config = await loadConfig();
-	return { ...config, ...options };
+	const overrides = Object.fromEntries(Object.entries(options ?? {}).filter(([, v]) => v != null));
+	return { ...config, ...overrides };
 }
 
 const cli = cac('reacticulum');
 
 cli
-	.command('build', 'Build NomadNet pages')
+	.command('build', 'Build Reacticulum pages')
 	.option('--pages-dir <dir>', 'Pages directory')
 	.option('--out-dir <dir>', 'Output directory')
 	.action(async (options) => {
-		const config = await resolveConfig({
-			...(options.pagesDir && { pagesDir: options.pagesDir }),
-			...(options.outDir && { outDir: options.outDir }),
-		});
+		const config = await resolveConfig({ pagesDir: options.pagesDir, outDir: options.outDir });
 		await build(config);
 	});
-
 cli
-	.command('watch', 'Watch pages directory and rebuild on changes')
+	.command('serve', 'Start a dev server')
 	.option('--pages-dir <dir>', 'Pages directory')
-	.option('--out-dir <dir>', 'Output directory')
+	.option('--port <port>', 'Port to listen on')
 	.action(async (options) => {
-		const config = await resolveConfig({
-			...(options.pagesDir && { pagesDir: options.pagesDir }),
-			...(options.outDir && { outDir: options.outDir }),
-		});
-
-		await build(config);
-
-		let debounce: ReturnType<typeof setTimeout> | null = null;
-
-		fs.watch(config.pagesDir, { recursive: true }, () => {
-			if (debounce) clearTimeout(debounce);
-			debounce = setTimeout(async () => {
-				console.log('change detected, rebuilding...');
-				await build(config);
-			}, 300);
-		});
-
-		console.log(`watching ${config.pagesDir}`);
+		const config = await loadConfig();
+		const pagesDir = options.pagesDir ?? config.pagesDir;
+		const port = options.port ? Number(options.port) : undefined;
+		await startServer({ pagesDir, port });
 	});
 
 cli.help();

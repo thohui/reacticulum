@@ -1,8 +1,6 @@
-import { StyleProps } from './types';
+import type { BoldProps } from '@reacticulum/types';
+export type { BoldProps };
 
-export interface BoldProps extends StyleProps {
-	children: React.ReactNode;
-}
 export function Bold(props: BoldProps) {
 	return null;
 }

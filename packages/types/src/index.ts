@@ -1,3 +1,5 @@
+export * from './props';
+
 export type MicronType =
 	| 'align'
 	| 'h1'
