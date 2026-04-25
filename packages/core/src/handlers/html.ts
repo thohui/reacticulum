@@ -30,20 +30,6 @@ function normalizeStyleColor(value: unknown): string {
 	return /^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(color) ? `#${color}` : color;
 }
 
-// Sanitize href values to prevent XSS vulnerabilities. Only allow relative URLs, anchors, query strings, and safe protocols.
-function sanitizeHref(to: string | undefined): string {
-	if (!to) return '#';
-	const href = to.trim();
-	if (!href) return '#';
-	if (href.startsWith('/') || href.startsWith('./') || href.startsWith('../') || href.startsWith('#') || href.startsWith('?')) {
-		return href;
-	}
-	if (/^(https?:|mailto:)/i.test(href)) {
-		return href;
-	}
-	return '#';
-}
-
 function styleAttr(props: StyleProps): string {
 	const attributes: string[] = [];
 
@@ -75,7 +61,7 @@ export const htmlHandlers: Record<MicronType, Handler> = {
 	italic: (props: ItalicProps, ctx) => `<em${styleAttr(props)}>${ctx.serialize(props.children)}</em>`,
 	underline: (props: UnderlineProps, ctx) => `<u${styleAttr(props)}>${ctx.serialize(props.children)}</u>`,
 	link: ({ children, to, ...styles }: LinkProps, ctx) =>
-		`<a href="${escapeHTML(sanitizeHref(to))}"${styleAttr(styles)}>${ctx.serialize(children)}</a>`,
+		`<a href="${escapeHTML(to)}"${styleAttr(styles)}>${ctx.serialize(children)}</a>`,
 	divider: (_: DividerProps) => `<hr />`,
 	color: ({ hex, children }: ColorProps, ctx) => {
 		const color = normalizeStyleColor(hex);

@@ -130,10 +130,6 @@ importers:
   packages/jsx-runtime: {}
 
   packages/types:
-    dependencies:
-      '@types/react':
-        specifier: ^19.2.14
-        version: 19.2.14
     devDependencies:
       '@reacticulum/jsx-runtime':
         specifier: workspace:*

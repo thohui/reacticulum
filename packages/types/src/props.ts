@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 
 export interface StyleProps {
 	align?: 'left' | 'center' | 'right';
@@ -11,11 +10,11 @@ export interface StyleProps {
 
 export interface AlignProps {
 	align: 'left' | 'center' | 'right';
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface BoldProps extends StyleProps {
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface CheckboxProps extends StyleProps {
@@ -27,7 +26,7 @@ export interface CheckboxProps extends StyleProps {
 
 export interface ColorProps {
 	hex: string;
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface DividerProps extends StyleProps {
@@ -35,15 +34,15 @@ export interface DividerProps extends StyleProps {
 }
 
 export interface H1Props extends StyleProps {
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface H2Props extends StyleProps {
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface H3Props extends StyleProps {
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface InputProps {
@@ -56,16 +55,16 @@ export interface InputProps {
 }
 
 export interface ItalicProps extends StyleProps {
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface LinkProps extends StyleProps {
 	to: string;
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface ParagraphProps extends StyleProps {
-	children?: ReactNode;
+	children?: unknown;
 }
 
 export interface RadioProps extends StyleProps {
@@ -76,5 +75,5 @@ export interface RadioProps extends StyleProps {
 }
 
 export interface UnderlineProps extends StyleProps {
-	children?: ReactNode;
+	children?: unknown;
 }

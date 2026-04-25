@@ -159,7 +159,7 @@ test('html Checkbox with color', () => {
 });
 
 test('html H1 with color', () => {
-	expect(renderHTML(<H1 color='f00'>Red heading</H1>)).toBe('<h1 style="color:f00">Red heading</h1>');
+	expect(renderHTML(<H1 color='f00'>Red heading</H1>)).toBe('<h1 style="color:#f00">Red heading</h1>');
 });
 
 test('html xss', () => {
