@@ -140,13 +140,24 @@ ${body}
 }
 
 function isPortInUse(port: number): Promise<boolean> {
-	return new Promise((resolve) => {
-		const server = net.createServer().listen(port);
+	return new Promise((resolve, reject) => {
+		const server = net.createServer();
+
 		server.on('listening', () => {
 			server.close();
 			resolve(false);
 		});
-		server.on('error', () => resolve(true));
+
+		server.on('error', (error: NodeJS.ErrnoException) => {
+			if (error.code === 'EADDRINUSE') {
+				resolve(true);
+				return;
+			}
+
+			reject(error);
+		});
+
+		server.listen(port);
 	});
 }
 
