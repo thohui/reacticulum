@@ -131,7 +131,7 @@ export async function build(options: BuildOptions) {
 		pages.map(async (pagePath) => {
 			// We have to load the page config before building so we know whether it's dynamic or static.
 			// If it's dynamic, we build a different bundle that executes at runtime instead of build time.
-			// This is a bit ineffecient, since we are "building" the page twice but it's fine for now.
+			// This is a bit inefficient, since we are "building" the page twice but it's fine for now.
 
 			const config = await loadPageConfig(pagePath, pagesDir);
 			const name = path.basename(pagePath, path.extname(pagePath));
