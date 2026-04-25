@@ -1,7 +1,6 @@
 import { build } from '@reacticulum/build';
 import { loadConfig, type ReacticulumConfig } from '@reacticulum/config';
 import cac from 'cac';
-import chokidar from 'chokidar';
 import { startServer } from './server';
 
 async function resolveConfig(options?: Partial<ReacticulumConfig>): Promise<ReacticulumConfig> {
@@ -20,20 +19,6 @@ cli
 		const config = await resolveConfig({ pagesDir: options.pagesDir, outDir: options.outDir });
 		await build(config);
 	});
-
-cli.command('watch', 'Watch pages directory and rebuild on changes').action(async (options) => {
-	const config = await resolveConfig({ pagesDir: options.pagesDir, outDir: options.outDir });
-
-	await build(config);
-
-	chokidar.watch(config.pagesDir).on('change', async () => {
-		console.log('file change detected, rebuilding...');
-		await build(config);
-	});
-
-	console.log(`watching ${config.pagesDir}`);
-});
-
 cli
 	.command('serve', 'Start a dev server')
 	.option('--pages-dir <dir>', 'Pages directory')
@@ -42,7 +27,6 @@ cli
 		const config = await loadConfig();
 		const pagesDir = options.pagesDir ?? config.pagesDir;
 		const port = options.port ? Number(options.port) : undefined;
-
 		await startServer({ pagesDir, port });
 	});
 

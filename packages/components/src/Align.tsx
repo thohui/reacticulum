@@ -1,7 +1,5 @@
-export interface AlignProps {
-	align: 'left' | 'center' | 'right';
-	children?: unknown;
-}
+import type { AlignProps } from '@reacticulum/types';
+export type { AlignProps };
 
 export function Align({ align }: AlignProps) {
 	return null;

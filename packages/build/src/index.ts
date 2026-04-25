@@ -175,7 +175,9 @@ async function buildStatic(options: BuildOptions, pagePath: string, name: string
 
 	// Ensure that static files are not executable.
 	// If a page was previously dynamic, but is now static, NomadNet would still treat it as dynamic and try to execute it.
-	await fs.chmod(outPath, '644');
+	if (process.platform !== 'win32') {
+		await fs.chmod(outPath, '644');
+	}
 
 	console.log(`static  => ${outPath}`);
 }
@@ -218,7 +220,9 @@ async function buildDynamic(options: BuildOptions, pagePath: string, name: strin
 	});
 
 	// Make the output file executable.
-	await fs.chmod(outPath, '755');
+	if (process.platform !== 'win32') {
+		await fs.chmod(outPath, '755');
+	}
 
 	console.log(`dynamic => ${outPath}`);
 }

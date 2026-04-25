@@ -5,6 +5,7 @@ import { Hono } from 'hono';
 import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
+import { debounce } from './utils';
 
 const encoder = new TextEncoder();
 
@@ -19,8 +20,7 @@ export interface ServerOptions {
  **/
 export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 	if (await isPortInUse(port)) {
-		console.error(`Port ${port} is already in use.`);
-		process.exit(1);
+		throw new Error(`Port ${port} is already in use.`);
 	}
 
 	const resolvedPagesDir = path.resolve(pagesDir);
@@ -86,12 +86,16 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 	});
 
 	// Watch the pages directory for changes and notify clients to reload when a change is detected.
-	chokidar.watch(resolvedPagesDir).on('change', () => {
-		const event = encoder.encode('data: reload\n\n');
-		for (const client of clients) {
-			client.write(event).catch(() => clients.delete(client));
-		}
-	});
+	chokidar.watch(resolvedPagesDir).on(
+		'change',
+		debounce(() => {
+			console.log('Change detected, notifying clients to reload...');
+			const event = encoder.encode('data: reload\n\n');
+			for (const client of clients) {
+				client.write(event).catch(() => clients.delete(client));
+			}
+		}, 100),
+	);
 
 	serve({ fetch: app.fetch, port });
 	console.log(`Server running at http://localhost:${port}`);

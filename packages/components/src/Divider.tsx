@@ -1,8 +1,5 @@
-import { StyleProps } from './types';
-
-export interface DividerProps extends StyleProps {
-	symbol: string;
-}
+import type { DividerProps } from '@reacticulum/types';
+export type { DividerProps };
 
 export function Divider({ symbol }: DividerProps) {
 	return null;

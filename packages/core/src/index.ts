@@ -2,7 +2,7 @@ import { getMicronMeta } from '@reacticulum/types';
 import type { SerializeContext } from './context';
 
 import { nativeHandlers } from './handlers/native';
-import { Renderer } from './renderers';
+import type { Renderer } from './renderers';
 import { htmlRenderer } from './renderers/html';
 import { micronRenderer } from './renderers/micron';
 

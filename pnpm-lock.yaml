@@ -130,13 +130,14 @@ importers:
   packages/jsx-runtime: {}
 
   packages/types:
+    dependencies:
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
     devDependencies:
       '@reacticulum/jsx-runtime':
         specifier: workspace:*
         version: link:../jsx-runtime
-      '@types/react':
-        specifier: ^19.2.14
-        version: 19.2.14
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(tsx@4.21.0)(typescript@6.0.2)

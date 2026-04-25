@@ -16,8 +16,10 @@
 	"scripts": {
 		"typecheck": "tsc --noEmit"
 	},
+	"dependencies": {
+		"@types/react": "^19.2.14"
+	},
 	"devDependencies": {
-		"@types/react": "^19.2.14",
 		"tsup": "^8.5.1",
 		"typescript": "^6.0.2",
 		"@reacticulum/jsx-runtime": "workspace:*"
