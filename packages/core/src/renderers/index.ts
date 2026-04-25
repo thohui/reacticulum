@@ -1,5 +1,5 @@
-import { ComponentMeta } from '@reacticulum/types';
-import { SerializeContext } from '../context';
+import type { ComponentMeta } from '@reacticulum/types';
+import type { SerializeContext } from '../context';
 
 export interface Renderer {
 	render(meta: ComponentMeta, props: any, ctx: SerializeContext): string;

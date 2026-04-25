@@ -12,7 +12,7 @@ import type {
 	RadioProps,
 } from '@reacticulum/types';
 import { escapeMarkdown } from '../utils/styles';
-import { Handler } from './handler';
+import type { Handler } from './handler';
 
 const alignTokens: Record<string, string> = {
 	left: '`l',
