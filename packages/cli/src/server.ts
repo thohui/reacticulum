@@ -50,13 +50,21 @@ export async function startServer({ pagesDir, port = 3000 }: ServerOptions) {
 	app.get('/:page', async (c) => {
 		let pageName = c.req.param('page');
 
+		// Basic validation to prevent directory traversal and invalid page names.
+		if (!/^[A-Za-z0-9_-]+$/.test(pageName)) {
+			return c.text('Page not found', 404);
+		}
+
 		// Strip .html extension if present so both /about and /about.html will work.
 		if (pageName.endsWith('.html') && pageName.length > 5) {
 			pageName = pageName.slice(0, -5);
 		}
 
-		console.log(`Request for page: ${pageName}`);
 		const pagePath = path.join(resolvedPagesDir, `${pageName}.tsx`);
+
+		if (!pagePath.startsWith(`${resolvedPagesDir}${path.sep}`)) {
+			return c.text('Page not found', 404);
+		}
 
 		if (!fs.existsSync(pagePath)) {
 			return c.text('Page not found', 404);

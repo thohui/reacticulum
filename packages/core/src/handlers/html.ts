@@ -60,8 +60,7 @@ export const htmlHandlers: Record<MicronType, Handler> = {
 	bold: (props: BoldProps, ctx) => `<strong${styleAttr(props)}>${ctx.serialize(props.children)}</strong>`,
 	italic: (props: ItalicProps, ctx) => `<em${styleAttr(props)}>${ctx.serialize(props.children)}</em>`,
 	underline: (props: UnderlineProps, ctx) => `<u${styleAttr(props)}>${ctx.serialize(props.children)}</u>`,
-	link: ({ children, to, ...styles }: LinkProps, ctx) =>
-		`<a href="${escapeHTML(to)}"${styleAttr(styles)}>${ctx.serialize(children)}</a>`,
+	link: ({ children, to, ...styles }: LinkProps, ctx) => `<a href="${escapeHTML(to)}"${styleAttr(styles)}>${ctx.serialize(children)}</a>`,
 	divider: (_: DividerProps) => `<hr />`,
 	color: ({ hex, children }: ColorProps, ctx) => {
 		const color = normalizeStyleColor(hex);

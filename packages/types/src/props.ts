@@ -1,4 +1,3 @@
-
 export interface StyleProps {
 	align?: 'left' | 'center' | 'right';
 	color?: string;
